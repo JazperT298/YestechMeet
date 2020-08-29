@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yestechmeet.activities.ProfileActivity;
+import com.theyestech.yestechmeet.activities.SearchContactActivity;
 import com.theyestech.yestechmeet.activities.StartActivity;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
@@ -110,28 +111,23 @@ public class MainActivity extends AppCompatActivity {
             PopupMenu popup = new PopupMenu(context, v);
             popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
 
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()){
-                        case  R.id.logout:
-                            openLogoutDialog();
-                            break;
-                        case R.id.profile:
-                            Intent intent = new Intent(context, ProfileActivity.class);
-                            startActivity(intent);
-                            break;
-                    }
-                    return true;
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()){
+                    case  R.id.logout:
+                        openLogoutDialog();
+                        break;
+                    case R.id.profile:
+                        Intent intent = new Intent(context, ProfileActivity.class);
+                        startActivity(intent);
+                        break;
                 }
+                return true;
             });
             popup.show();
         });
-        iv_Search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(context, SearchContactActivity.class);
-//                startActivity(intent);
-            }
+        iv_Search.setOnClickListener(v -> {
+            Intent intent = new Intent(context, SearchContactActivity.class);
+            startActivity(intent);
         });
     }
 

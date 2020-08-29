@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/footerBackground"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.ProfileActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/iv_Back"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            android:scaleType="center"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_Phone"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_phone_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_Video"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_video_call_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_Phone"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appCompatButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:gravity="center"
+            android:text="ADD FRIEND"
+            android:visibility="visible"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appCompatButton2"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="DECLINE REQUEST"
+            android:textColor="@color/colorWhite"
+            android:visibility="gone"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/appCompatButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        android:scrollingCache="true"
+        android:visibility="visible"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_Image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:foreground="@color/overlay_dark_30"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chat_icons" />
+
+            <ImageView
+                android:id="@+id/iv_userImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="-45dp"
+                android:src="@drawable/chat_icons" />
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:text="John Anderson"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorWhite" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_large"
+                    android:layout_height="@dimen/spacing_large"
+                    android:layout_marginEnd="@dimen/spacing_medium"
+                    android:layout_marginRight="@dimen/spacing_medium"
+                    android:tint="@color/colorWhite"
+                    app:srcCompat="@drawable/ic_email_black_24dp" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Far Rockaway, NY"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spacing_large" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
