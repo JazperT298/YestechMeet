@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theyestech.yestechmeet.activities.NotificationActivity;
 import com.theyestech.yestechmeet.activities.ProfileActivity;
 import com.theyestech.yestechmeet.activities.SearchContactActivity;
 import com.theyestech.yestechmeet.activities.StartActivity;
@@ -100,12 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        iv_Notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(context, NotificationActivity.class);
-                //startActivity(intent);
-            }
+        iv_Notification.setOnClickListener(v -> {
+            Intent intent = new Intent(context, NotificationActivity.class);
+            startActivity(intent);
         });
         iv_More.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(context, v);
