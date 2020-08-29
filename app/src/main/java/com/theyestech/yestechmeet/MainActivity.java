@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theyestech.yestechmeet.activities.ProfileActivity;
 import com.theyestech.yestechmeet.activities.StartActivity;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        context = this;
+
         initializeUI();
     }
 
@@ -102,28 +106,25 @@ public class MainActivity extends AppCompatActivity {
                 //startActivity(intent);
             }
         });
-        iv_More.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(context, v);
-                popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
+        iv_More.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(context, v);
+            popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case  R.id.logout:
-                                openLogoutDialog();
-                                break;
-                            case R.id.profile:
-                                //Intent intent = new Intent(context, ProfileActivity.class);
-                                //startActivity(intent);
-                                break;
-                        }
-                        return true;
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()){
+                        case  R.id.logout:
+                            openLogoutDialog();
+                            break;
+                        case R.id.profile:
+                            Intent intent = new Intent(context, ProfileActivity.class);
+                            startActivity(intent);
+                            break;
                     }
-                });
-                popup.show();//
-            }
+                    return true;
+                }
+            });
+            popup.show();
         });
         iv_Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,13 +140,10 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle("Logout")
                 .setIcon(R.drawable.ic_logout_colored)
                 .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FirebaseAuth.getInstance().signOut();
-                        // change this code beacuse your app will crash
-                        startActivity(new Intent(context, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    }
+                .setPositiveButton("YES", (dialog1, which) -> {
+                    FirebaseAuth.getInstance().signOut();
+                    // change this code beacuse your app will crash
+                    startActivity(new Intent(context, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 })
                 .setNegativeButton("NO", null)
                 .create();

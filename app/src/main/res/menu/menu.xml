@@ -4,11 +4,11 @@
 
     <item
         android:id="@+id/profile"
-        android:title="Profile"
+        android:title="@string/profile"
         app:showAsAction="never"/>
     <item
         android:id="@+id/logout"
-        android:title="Logout"
+        android:title="@string/logout"
         app:showAsAction="never"/>
 
 </menu>

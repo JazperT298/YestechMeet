@@ -22,4 +22,6 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="new_user">New user?</string>
     <string name="sign_up">Sign Up</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
 </resources>
