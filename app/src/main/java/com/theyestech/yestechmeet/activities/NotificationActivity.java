@@ -54,6 +54,7 @@ public class NotificationActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private String currentUserId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ public class NotificationActivity extends AppCompatActivity {
         initializeUI();
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserId = firebaseAuth.getCurrentUser().getUid();
@@ -92,7 +93,7 @@ public class NotificationActivity extends AppCompatActivity {
         getAllNotifications();
     }
 
-    private void getAllNotifications(){
+    private void getAllNotifications() {
         notificationArrayList = new ArrayList<>();
         rv_Notification.setLayoutManager(new LinearLayoutManager(context));
 
@@ -105,22 +106,22 @@ public class NotificationActivity extends AppCompatActivity {
                 holder.tv_DeclineRequest.setVisibility(View.VISIBLE);
                 holder.tv_AcceptRequest.setVisibility(View.VISIBLE);
 
-                final String listUserId =  getRef(position).getKey();
+                final String listUserId = getRef(position).getKey();
 
                 DatabaseReference requestTypeRef = getRef(position).child("request_type").getRef();
                 requestTypeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         swipe_Notification.setRefreshing(true);
-                        if(snapshot.exists()){
+                        if (snapshot.exists()) {
                             String type = snapshot.getValue().toString();
-                            if(type.equals("received")){
+                            if (type.equals("received")) {
                                 swipe_Notification.setRefreshing(false);
                                 holder.constraint.setVisibility(View.VISIBLE);
                                 usersRef.child(listUserId).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if(snapshot.hasChild("profilePhoto")){
+                                        if (snapshot.hasChild("profilePhoto")) {
                                             final String profilePhoto = snapshot.child("profilePhoto").getValue().toString();
                                             Glide.with(getApplicationContext())
                                                     .load(profilePhoto)
@@ -145,7 +146,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                                     }
                                 });
-                            }else{
+                            } else {
                                 holder.constraint.setVisibility(View.GONE);
                             }
                         }
@@ -161,7 +162,7 @@ public class NotificationActivity extends AppCompatActivity {
             @NonNull
             @Override
             public NotificationsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listrow_friend_request, parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listrow_friend_request, parent, false);
                 NotificationsViewHolder viewHolder = new NotificationsViewHolder(view);
                 return viewHolder;
             }
@@ -172,8 +173,8 @@ public class NotificationActivity extends AppCompatActivity {
         indicator_empty_chat.setVisibility(View.GONE);
     }
 
-    private static class NotificationsViewHolder extends RecyclerView.ViewHolder{
-        private TextView username,tv_DeclineRequest,tv_AcceptRequest;
+    private static class NotificationsViewHolder extends RecyclerView.ViewHolder {
+        private TextView username, tv_DeclineRequest, tv_AcceptRequest;
         private ImageView profile_image;
         private ImageView img_on;
         private ImageView img_off;
@@ -192,19 +193,19 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
-    private void acceptFriendRequest(final String userid){
+    private void acceptFriendRequest(final String userid) {
         contactsRef.child(currentUserId).child(userid).child("Contacts").setValue("Saved")
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         contactsRef.child(userid).child(currentUserId).child("Contacts").setValue("Saved")
                                 .addOnCompleteListener(task13 -> {
-                                    if(task13.isSuccessful()){
+                                    if (task13.isSuccessful()) {
                                         friendRequestRef.child(currentUserId).child(userid).removeValue()
                                                 .addOnCompleteListener(task12 -> {
-                                                    if (task12.isSuccessful()){
+                                                    if (task12.isSuccessful()) {
                                                         friendRequestRef.child(userid).child(currentUserId).removeValue()
                                                                 .addOnCompleteListener(task1 -> {
-                                                                    if(task1.isSuccessful()){
+                                                                    if (task1.isSuccessful()) {
                                                                         swipe_Notification.setRefreshing(false);
                                                                         Toasty.success(context, "Friend Request Accepted").show();
                                                                     }
@@ -217,10 +218,10 @@ public class NotificationActivity extends AppCompatActivity {
                 });
     }
 
-    private void cancelFriendRequest(final String userid){
+    private void cancelFriendRequest(final String userid) {
         friendRequestRef.child(currentUserId).child(userid).removeValue()
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         friendRequestRef.child(userid).child(currentUserId).removeValue()
                                 .addOnCompleteListener(task1 -> {
                                     swipe_Notification.setRefreshing(false);

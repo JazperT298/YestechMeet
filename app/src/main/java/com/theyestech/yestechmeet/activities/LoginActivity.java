@@ -23,6 +23,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.theyestech.yestechmeet.MainActivity;
 import com.theyestech.yestechmeet.R;
+import com.theyestech.yestechmeet.utils.Constants;
+import com.theyestech.yestechmeet.utils.PreferenceManager;
 
 public class LoginActivity extends AppCompatActivity {
     private View view;
@@ -33,11 +35,15 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     private FirebaseAuth auth;
+
+    private PreferenceManager preferenceManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = this;
+
+        preferenceManager = new PreferenceManager(context);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

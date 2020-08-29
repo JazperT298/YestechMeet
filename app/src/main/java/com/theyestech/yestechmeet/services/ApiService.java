@@ -12,7 +12,7 @@ import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
-public interface APIService {
+public interface ApiService {
     @Headers(
             {
                     "Content-Type:application/json",

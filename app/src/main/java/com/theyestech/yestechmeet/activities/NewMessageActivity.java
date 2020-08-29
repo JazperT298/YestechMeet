@@ -13,7 +13,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,7 +40,7 @@ import com.theyestech.yestechmeet.notifications.Data;
 import com.theyestech.yestechmeet.notifications.MyResponse;
 import com.theyestech.yestechmeet.notifications.Sender;
 import com.theyestech.yestechmeet.notifications.Token;
-import com.theyestech.yestechmeet.services.APIService;
+import com.theyestech.yestechmeet.services.ApiService;
 import com.theyestech.yestechmeet.services.ApiClient;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 import com.theyestech.yestechmeet.utils.KeyboardHandler;
@@ -84,7 +83,7 @@ public class NewMessageActivity extends AppCompatActivity {
     private Users selectedUsers = new Users();
     boolean notify = false;
 
-    private APIService apiService;
+    private ApiService apiService;
 
     private ArrayList<Chat> chatArrayList;
     private DatabaseReference reference;
@@ -111,7 +110,7 @@ public class NewMessageActivity extends AppCompatActivity {
 
         senderId = firebaseUser.getUid();
 
-        apiService = ApiClient.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        apiService = ApiClient.getClient().create(ApiService.class);
 
         initializeUI();
         readAllUsers();

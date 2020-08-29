@@ -56,7 +56,7 @@ public class ContactsFragment extends Fragment {
     private DatabaseReference usersRef, friendRequestRef, contactsRef;
     private FirebaseAuth firebaseAuth;
     private String currentUserId;
-    private String userName = "", profileImage = "", calledBy= "";
+    private String userName = "", profileImage = "", calledBy = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +68,8 @@ public class ContactsFragment extends Fragment {
         readAllUsers();
         return view;
     }
-    private void initializeUI(){
+
+    private void initializeUI() {
         swipe_Contacts = view.findViewById(R.id.swipe_Contacts);
         indicator_empty_chat = view.findViewById(R.id.view_EmptyChat);
         rv_Contacts = view.findViewById(R.id.rv_Contacts);
@@ -99,13 +100,13 @@ public class ContactsFragment extends Fragment {
         FirebaseRecyclerAdapter<Users, ContactsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, ContactsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ContactsViewHolder holder, int position, @NonNull Users model) {
-                final String listUserId =  getRef(position).getKey();
+                final String listUserId = getRef(position).getKey();
 
                 usersRef.child(listUserId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         swipe_Contacts.setRefreshing(true);
-                        if(snapshot.exists()){
+                        if (snapshot.exists()) {
                             swipe_Contacts.setRefreshing(false);
                             userName = snapshot.child("name").getValue().toString();
                             profileImage = snapshot.child("profilePhoto").getValue().toString();
@@ -116,17 +117,15 @@ public class ContactsFragment extends Fragment {
                                     .apply(GlideOptions.getOptions())
                                     .into(holder.profile_image);
                             //holder.date.setText();
-                            holder.constraint.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //openUsersProfile(listUserId);
-                                    Intent intent = new Intent(context, MessageActivity.class);
-                                    intent.putExtra("userid", listUserId);
-                                    startActivity(intent);
-                                }
+                            holder.constraint.setOnClickListener(v -> {
+                                //openUsersProfile(listUserId);
+                                Intent intent = new Intent(context, MessageActivity.class);
+                                intent.putExtra("userid", listUserId);
+                                startActivity(intent);
                             });
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -137,7 +136,7 @@ public class ContactsFragment extends Fragment {
             @NonNull
             @Override
             public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_chat_item, parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_chat_item, parent, false);
                 ContactsViewHolder viewHolder = new ContactsViewHolder(view);
                 return viewHolder;
             }
@@ -147,7 +146,7 @@ public class ContactsFragment extends Fragment {
         indicator_empty_chat.setVisibility(View.GONE);
     }
 
-    private static class ContactsViewHolder extends RecyclerView.ViewHolder{
+    private static class ContactsViewHolder extends RecyclerView.ViewHolder {
         private TextView username;
         private ImageView profile_image;
         private ImageView img_on;

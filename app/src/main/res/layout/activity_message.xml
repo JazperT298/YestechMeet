@@ -60,6 +60,7 @@
             android:scaleType="center"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_info_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +79,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_More"
             app:layout_constraintTop_toTopOf="parent" />
-
+        <ImageView
+            android:id="@+id/iv_Audio"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            android:scaleType="center"
+            android:src="@drawable/ic_audio"
+            app:tint="@color/colorWhite"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_Video"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <View

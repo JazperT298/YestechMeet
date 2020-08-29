@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.api.Api;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,13 +27,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yestechmeet.R;
 import com.theyestech.yestechmeet.adapters.MessageAdapter;
+import com.theyestech.yestechmeet.listeners.UsersListener;
 import com.theyestech.yestechmeet.models.Chat;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.notifications.Data;
 import com.theyestech.yestechmeet.notifications.MyResponse;
 import com.theyestech.yestechmeet.notifications.Sender;
 import com.theyestech.yestechmeet.notifications.Token;
-import com.theyestech.yestechmeet.services.APIService;
+import com.theyestech.yestechmeet.services.ApiService;
 import com.theyestech.yestechmeet.services.ApiClient;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
@@ -47,12 +48,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends AppCompatActivity implements UsersListener{
     private Context context;
     //Widgets
     private ImageView profile_image;
     private TextView username;
-    private ImageView btn_send,iv_Back,iv_More,iv_Video,iv_File;
+    private ImageView btn_send,iv_Back,iv_More,iv_Video,iv_File,iv_Audio;
     private EditText text_send;
     private RecyclerView recyclerView;
     private String role;
@@ -66,7 +67,7 @@ public class MessageActivity extends AppCompatActivity {
     private Intent intent;
 
     //Services
-    private APIService apiService;
+    private ApiService apiService;
     private ValueEventListener seenListener;
 
     //Firebase
@@ -75,6 +76,10 @@ public class MessageActivity extends AppCompatActivity {
     private DatabaseReference reference;
 
     boolean notify = false;
+    private UsersListener usersListener;
+    private Users users;
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +87,11 @@ public class MessageActivity extends AppCompatActivity {
         context = this;
 
         initializeUI();
+        setUserHeader();
     }
     private void initializeUI() {
         //Firebase Database
-        apiService = ApiClient.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        apiService = ApiClient.getClient().create(ApiService.class);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -100,6 +106,7 @@ public class MessageActivity extends AppCompatActivity {
         iv_Back = findViewById(R.id.iv_Back);
         iv_More = findViewById(R.id.iv_More);
         iv_Video = findViewById(R.id.iv_Video);
+        iv_Audio = findViewById(R.id.iv_Audio);
         iv_File = findViewById(R.id.iv_File);
 
         intent = getIntent();
@@ -116,9 +123,27 @@ public class MessageActivity extends AppCompatActivity {
         iv_Video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(context, CallingActivity.class);
-//                intent.putExtra("userid", userid);
-//                startActivity(intent);
+                if (token == null || token.trim().isEmpty()) {
+                    Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+                    intent.putExtra("users", users);
+                    intent.putExtra("type", "video");
+                    startActivity(intent);
+                }
+            }
+        });
+        iv_Audio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+                    Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+                    intent.putExtra("userid", userid);
+                    intent.putExtra("type", "audio");
+                    startActivity(intent);
+                }
             }
         });
         iv_File.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +168,6 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        setUserHeader();
     }
 
     private void setUserHeader(){
@@ -151,17 +175,13 @@ public class MessageActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users users = dataSnapshot.getValue(Users.class);
-                //if (users.getName().isEmpty() || users.getFullName().equals("  ")){
-                username.setText(users.getEmail());
-                //}else{
+                users = dataSnapshot.getValue(Users.class);
                 username.setText(users.getName());
-                //}
                 Glide.with(getApplicationContext())
                         .load(users.getProfilePhoto())
                         .apply(GlideOptions.getOptions())
                         .into(profile_image);
-
+                token = users.getToken();
                 readUserMessages(fuser.getUid(), userid, users.getProfilePhoto());
             }
 
@@ -401,5 +421,45 @@ public class MessageActivity extends AppCompatActivity {
         status("offline");
         currentUser("none");
         setUserHeader();
+    }
+
+    @Override
+    public void initiateVideoMeeting(Users users) {
+        if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+            Toast.makeText(this, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+            intent.putExtra("users", users);
+            intent.putExtra("type", "video");
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void initiateAudioMeeting(Users users) {
+        if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+            Toast.makeText(this, users.getUsername() + " " +  "is not available for meeting", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+            intent.putExtra("users", users);
+            intent.putExtra("type", "audio");
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onMultipleUsersAction(Boolean isMultipleUsersSelected) {
+//        if (isMultipleUsersSelected) {
+//            iv_Conference.setVisibility(View.VISIBLE);
+//            iv_Conference.setOnClickListener(v -> {
+//                Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+//                intent.putExtra("selectedUsers", new Gson().toJson(usersAdapter.getSelectedUsers()));
+//                intent.putExtra("type", "video");
+//                intent.putExtra("isMultiple", true);
+//                startActivity(intent);
+//            });
+//        } else {
+//            iv_Conference.setVisibility(View.GONE);
+//        }
     }
 }

@@ -9,8 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,12 +22,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.theyestech.yestechmeet.activities.NotificationActivity;
 import com.theyestech.yestechmeet.activities.ProfileActivity;
 import com.theyestech.yestechmeet.activities.SearchContactActivity;
 import com.theyestech.yestechmeet.activities.StartActivity;
 import com.theyestech.yestechmeet.models.Users;
+import com.theyestech.yestechmeet.utils.Constants;
 import com.theyestech.yestechmeet.utils.GlideOptions;
+import com.theyestech.yestechmeet.utils.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +39,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private View view;
@@ -42,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private DatabaseReference reference,usersRef;
     private String currentUserId;
+
+    private PreferenceManager preferenceManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         initializeUI();
+
+        preferenceManager = new PreferenceManager(context);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(task.isSuccessful() && task.getResult() != null){
+                    sendFCMTokenToDatabase(task.getResult().getToken());
+                }
+            }
+        });
     }
 
     private void initializeUI() {
@@ -129,6 +151,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void sendFCMTokenToDatabase(String token) {
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("token", token);
+        reference.updateChildren(map);
+    }
+
     private void openLogoutDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Logout")
@@ -137,6 +167,11 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("YES", (dialog1, which) -> {
                     FirebaseAuth.getInstance().signOut();
                     // change this code beacuse your app will crash
+                    reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put(Constants.KEY_FCM_TOKEN, "");
+                    reference.updateChildren(map);
+
                     startActivity(new Intent(context, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 })
                 .setNegativeButton("NO", null)
