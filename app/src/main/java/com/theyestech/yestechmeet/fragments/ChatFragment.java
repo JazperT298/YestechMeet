@@ -1,66 +1,216 @@
 package com.theyestech.yestechmeet.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.theyestech.yestechmeet.R;
+import com.theyestech.yestechmeet.activities.NewMessageActivity;
+import com.theyestech.yestechmeet.adapters.UserChatListAdapter;
+import com.theyestech.yestechmeet.models.Chatlist;
+import com.theyestech.yestechmeet.models.Users;
+import com.theyestech.yestechmeet.notifications.Token;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChatFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class ChatFragment extends Fragment {
+    private View view;
+    private Context context;
+    private DatabaseReference reference;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView tvHeader,tv_UserName;
+    private ImageView ivProfile,iv_UserImage;
+    private SwipeRefreshLayout swipe_ChatThreads;
+    private RecyclerView rv_ChatThreads, rv_Contacts;
+    private ConstraintLayout emptyIndicator;
+    private FloatingActionButton floatingActionButton;
+    private ProgressBar progressBar;
+    private UserChatListAdapter userChatListAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String role;
 
-    public ChatFragment() {
-        // Required empty public constructor
-    }
+    //Firebase
+    private FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1, String param2) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private ArrayList<Users> usersArrayList = new ArrayList<>();
+    private ArrayList<Users> usersArrayList2 = new ArrayList<>();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    private ArrayList<Chatlist> chatlistArrayList;
+    private Users selectedUsers;
+    private DatabaseReference usersRef;
+    private String currentUserId;
+    private String calledBy="";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        view = inflater.inflate(R.layout.fragment_chat, container, false);
+        context = getContext();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        initializeUI();
+
+        return view;
+    }
+
+    private void initializeUI(){
+        rv_Contacts = view.findViewById(R.id.rv_Contacts);
+        rv_ChatThreads = view.findViewById(R.id.rv_ChatThreads);
+        swipe_ChatThreads = view.findViewById(R.id.swipe_ChatThreads);
+        emptyIndicator = view.findViewById(R.id.view_EmptyChat);
+        floatingActionButton = view.findViewById(R.id.fab_ChatThreadNew);
+        progressBar = view.findViewById(R.id.progress_ChatThreads);
+
+        updateToken(FirebaseInstanceId.getInstance().getToken());
+
+        getAllChats();
+        readAllUsers();
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewMessageActivity.class);
+                intent.putParcelableArrayListExtra("USERARRAYLIST", usersArrayList2);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void accessingServer(boolean isAccessing) {
+        floatingActionButton.setVisibility(isAccessing ? View.GONE : View.VISIBLE);
+        progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
+    }
+
+    private void getAllChats(){
+        accessingServer(true);
+        chatlistArrayList = new ArrayList<>();
+
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatlistArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                    chatlistArrayList.add(chatlist);
+                }
+                Collections.reverse(chatlistArrayList);
+                chatUserList();
+                accessingServer(false);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                accessingServer(false);
+            }
+        });
+        updateToken(FirebaseInstanceId.getInstance().getToken());
+    }
+
+    private void chatUserList() {
+        usersArrayList = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersArrayList.clear();
+                emptyIndicator.setVisibility(View.GONE);
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Users users = snapshot.getValue(Users.class);
+                    for (Chatlist chatlist : chatlistArrayList){
+                        if (users.getId().equals(chatlist.getId())){
+                            usersArrayList.add(users);
+                        }
+                    }
+                }
+                Collections.reverse(usersArrayList);
+
+                rv_ChatThreads.setLayoutManager(new LinearLayoutManager(context));
+                rv_ChatThreads.setHasFixedSize(true);
+
+                userChatListAdapter = new UserChatListAdapter(context, usersArrayList, true);
+                rv_ChatThreads.setAdapter(userChatListAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void readAllUsers() {
+
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersArrayList2.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Users users = snapshot.getValue(Users.class);
+
+                    if (!users.getId().equals(firebaseUser.getUid())) {
+                        usersArrayList2.add(users);
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    private void updateToken(String token){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(firebaseUser.getUid()).setValue(token1);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //getAllChats();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }
