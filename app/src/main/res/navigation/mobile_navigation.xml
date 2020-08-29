@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_chats">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.theyestech.yestechmeet.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_chats"
+        android:name="com.theyestech.yestechmeet.fragments.ChatFragment"
+        android:label="@string/title_chats"
+        tools:layout="@layout/fragment_chat" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.theyestech.yestechmeet.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_meeting"
+        android:name="com.theyestech.yestechmeet.fragments.MeetingFragment"
+        android:label="@string/title_meeting"
+        tools:layout="@layout/fragment_meeting" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.theyestech.yestechmeet.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_contacts"
+        android:name="com.theyestech.yestechmeet.fragments.ContactsFragment"
+        android:label="@string/title_contacts"
+        tools:layout="@layout/fragment_contacts" />
 </navigation>
