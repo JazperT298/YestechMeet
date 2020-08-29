@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.theyestech.yestechmeet">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -10,6 +11,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,8 +19,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.ResetPasswordActivity"
+            />
+        <activity android:name=".MainActivity"
+            android:parentActivityName=".activities.StartActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.RegisterActivity"
+            android:parentActivityName=".activities.StartActivity" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:parentActivityName=".activities.StartActivity" />
+        <activity
+            android:name=".activities.StartActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

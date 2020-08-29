@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "1069985581903",
+    "firebase_url": "https://yes-video-call.firebaseio.com",
+    "project_id": "yes-video-call",
+    "storage_bucket": "yes-video-call.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069985581903:android:285226d6c3283f0223d33a",
+        "android_client_info": {
+          "package_name": "com.example.yesvideocall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069985581903-4cq85ratrm6g3h51lb31qf53jotrutol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yesvideocall",
+            "certificate_hash": "44ede306cd621ceb9c12a29ce32d9d7ffc462361"
+          }
+        },
+        {
+          "client_id": "1069985581903-qc1eopvaqgkrg682169kg8ro92uo9mu3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4FCY0D1X_f0OGSgxPZy4FIe7LILSOGq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069985581903-qc1eopvaqgkrg682169kg8ro92uo9mu3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069985581903:android:7726b15b55ad008023d33a",
+        "android_client_info": {
+          "package_name": "com.theyestech.yestechmeet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069985581903-qc1eopvaqgkrg682169kg8ro92uo9mu3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4FCY0D1X_f0OGSgxPZy4FIe7LILSOGq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069985581903-qc1eopvaqgkrg682169kg8ro92uo9mu3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
