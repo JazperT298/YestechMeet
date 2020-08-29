@@ -4,6 +4,280 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/footerBackground"
     tools:context=".activities.NewMessageActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_Back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_Phone"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_phone_white_24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/iv_Video"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_video_call_black_24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_Phone"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+
+        <TextView
+            android:id="@+id/appCompatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="New Message"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_Back"
+            app:layout_constraintStart_toEndOf="@+id/iv_Back"
+            app:layout_constraintTop_toTopOf="@+id/iv_Back" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="408dp"
+        android:layout_height="53dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <ImageView
+            android:id="@+id/imageView15sss"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_Image"
+            app:layout_constraintEnd_toEndOf="@+id/iv_Image"
+            app:layout_constraintStart_toStartOf="@+id/iv_Image"
+            app:layout_constraintTop_toTopOf="@+id/iv_Image"
+            app:srcCompat="@drawable/bg_round_white" />
+
+        <ImageView
+            android:id="@+id/iv_Image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/user1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <AutoCompleteTextView
+            android:id="@+id/et_SearchUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:hint="Search Name..."
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:padding="12dp"
+            android:singleLine="true"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView15sss"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_Image"
+            app:layout_constraintTop_toTopOf="@+id/imageView15sss" />
+
+
+        <ImageView
+            android:id="@+id/imageView1s"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_Close"
+            app:layout_constraintEnd_toEndOf="@+id/iv_Close"
+            app:layout_constraintStart_toStartOf="@+id/iv_Close"
+            app:layout_constraintTop_toTopOf="@+id/iv_Close"
+            app:srcCompat="@drawable/bg_round_black" />
+        <ImageView
+            android:id="@+id/iv_Close"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_close_black_24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/et_SearchUser"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <View
+            android:id="@+id/view10"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/colorGrey"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/et_SearchUser"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/et_SearchUser"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/suggested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Suggested"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_user"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/footerBackground"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/suggested" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_chat"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        android:background="@color/footerBackground"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/suggested" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorGrey"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout43"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout43"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@color/footerBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView15s"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_File"
+            app:layout_constraintEnd_toEndOf="@+id/iv_File"
+            app:layout_constraintStart_toStartOf="@+id/iv_File"
+            app:layout_constraintTop_toTopOf="@+id/iv_File"
+            app:srcCompat="@drawable/bf_round_blue" />
+        <ImageView
+            android:id="@+id/iv_File"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_add_white_24dp" />
+
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_edittext2"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="Write something"
+            android:inputType="textMultiLine"
+            android:padding="12dp"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_sends"
+            app:layout_constraintStart_toEndOf="@+id/iv_File"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView15ss"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_sends"
+            app:layout_constraintEnd_toEndOf="@+id/btn_sends"
+            app:layout_constraintStart_toStartOf="@+id/btn_sends"
+            app:layout_constraintTop_toTopOf="@+id/btn_sends"
+            app:srcCompat="@drawable/bf_round_blue" />
+        <ImageView
+            android:id="@+id/btn_sends"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_send_white_24dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
