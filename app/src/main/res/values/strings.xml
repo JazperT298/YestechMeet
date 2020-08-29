@@ -26,5 +26,6 @@
     <string name="logout">Logout</string>
     <string name="FCM_PREF">com.theyestech.yestechmeet.fcm_pref</string>
     <string name="FCM_TOKEN">com.theyestech.yestechmeet.fcm_token</string>
+    <string name="incoming_meeting_invitation">Incoming Meeting Invitation</string>
 
 </resources>

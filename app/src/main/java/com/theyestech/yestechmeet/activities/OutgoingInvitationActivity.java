@@ -135,7 +135,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
                     } else {
                         if (userid != null) {
                             totalReceivers = 1;
-                            initiateMeeting(meetingType, users.getToken(), null);
+                            initiateMeeting(meetingType,token, null);
                         }
                     }
                 }
@@ -170,6 +170,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
             data.put(Constants.REMOTE_MSG_TYPE, Constants.REMOTE_MSG_INVITATION);
             data.put(Constants.REMOTE_MSG_MEETING_TYPE, meetingType);
             data.put(Constants.KEY_FIRST_NAME, users.getName());
+            data.put(Constants.KEY_PROFILE_IMAGE, users.getProfilePhoto());
             data.put(Constants.KEY_EMAIL, users.getEmail());
             data.put(Constants.REMOTE_MSG_INVITER_TOKEN, inviterToken);
 

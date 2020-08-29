@@ -36,7 +36,10 @@ import com.theyestech.yestechmeet.notifications.Sender;
 import com.theyestech.yestechmeet.notifications.Token;
 import com.theyestech.yestechmeet.services.ApiService;
 import com.theyestech.yestechmeet.services.ApiClient;
+import com.theyestech.yestechmeet.services.Client;
 import com.theyestech.yestechmeet.utils.GlideOptions;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,7 +94,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
     }
     private void initializeUI() {
         //Firebase Database
-        apiService = ApiClient.getClient().create(ApiService.class);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiService.class);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -120,52 +123,40 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         iv_Back.setOnClickListener(v -> finish());
         profile_image.setOnClickListener(v -> openUsersProfile(userid));
         iv_More.setOnClickListener(v -> openUsersProfile(userid));
-        iv_Video.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (token == null || token.trim().isEmpty()) {
-                    Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
-                } else {
-                    Intent intent = new Intent(context, OutgoingInvitationActivity.class);
-                    intent.putExtra("users", users);
-                    intent.putExtra("type", "video");
-                    startActivity(intent);
-                }
+        iv_Video.setOnClickListener(v -> {
+            if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+                Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+                intent.putExtra("userid", userid);
+                intent.putExtra("type", "video");
+                startActivity(intent);
             }
         });
-        iv_Audio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (users.getToken() == null || users.getToken().trim().isEmpty()) {
-                    Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
-                } else {
-                    Intent intent = new Intent(context, OutgoingInvitationActivity.class);
-                    intent.putExtra("userid", userid);
-                    intent.putExtra("type", "audio");
-                    startActivity(intent);
-                }
+        iv_Audio.setOnClickListener(v -> {
+            if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+                Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent(context, OutgoingInvitationActivity.class);
+                intent.putExtra("userid", userid);
+                intent.putExtra("type", "audio");
+                startActivity(intent);
             }
         });
-        iv_File.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //openUsersProfile(userid);
-            }
+        iv_File.setOnClickListener(v -> {
+            //openUsersProfile(userid);
         });
 
 
-        btn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                notify = true;
-                String msg = text_send.getText().toString();
-                if (!msg.equals("")){
-                    sendUserMessage(fuser.getUid(), userid, msg, currentDate);
-                } else {
-                    Toasty.warning(context, "You can't send empty message").show();
-                }
-                text_send.setText("");
+        btn_send.setOnClickListener(view -> {
+            notify = true;
+            String msg = text_send.getText().toString();
+            if (!msg.equals("")){
+                sendUserMessage(fuser.getUid(), userid, msg, currentDate);
+            } else {
+                Toasty.warning(context, "You can't send empty message").show();
             }
+            text_send.setText("");
         });
 
     }
@@ -320,7 +311,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {
                                 @Override
-                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                public void onResponse(@NotNull Call<MyResponse> call, @NotNull Response<MyResponse> response) {
                                     if (response.code() == 200){
                                         if (response.body().success != 1){
                                             Toasty.error(context, "Failed!").show();
@@ -329,7 +320,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
                                 }
 
                                 @Override
-                                public void onFailure(Call<MyResponse> call, Throwable t) {
+                                public void onFailure(@NotNull Call<MyResponse> call, @NotNull Throwable t) {
 
                                 }
                             });

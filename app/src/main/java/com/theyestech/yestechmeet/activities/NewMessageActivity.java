@@ -42,6 +42,7 @@ import com.theyestech.yestechmeet.notifications.Sender;
 import com.theyestech.yestechmeet.notifications.Token;
 import com.theyestech.yestechmeet.services.ApiService;
 import com.theyestech.yestechmeet.services.ApiClient;
+import com.theyestech.yestechmeet.services.Client;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 import com.theyestech.yestechmeet.utils.KeyboardHandler;
 
@@ -110,7 +111,7 @@ public class NewMessageActivity extends AppCompatActivity {
 
         senderId = firebaseUser.getUid();
 
-        apiService = ApiClient.getClient().create(ApiService.class);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiService.class);
 
         initializeUI();
         readAllUsers();

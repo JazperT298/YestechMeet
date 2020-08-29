@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_meeting_invitation"
-    tools:context=".activities.OutgoingInvitationActivity">
+    tools:context=".activities.IncomingInvitationActivity">
 
     <ImageView
         android:id="@+id/iV_MeetingType"
-        android:layout_width="50dp"
+        android:layout_width="50sp"
         android:layout_height="50dp"
         android:layout_marginTop="50dp"
         android:contentDescription="@string/app_name"
@@ -18,15 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/colorWhite" />
 
-
     <TextView
-        android:id="@+id/tv_SendingMeetingInvitation"
+        android:id="@+id/tv_IncomingMeetingInvitation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="Sending Meeting Invitation"
+        android:text="@string/incoming_meeting_invitation"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@+id/iV_MeetingType"/>
@@ -54,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textStyle="bold"
             android:gravity="center"
             android:includeFontPadding="false"
             android:textColor="@color/colorWhite"
@@ -71,17 +71,31 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_StopInvitation"
+        android:id="@+id/iv_AcceptInvitation"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/background_accept_invitation"
+        android:contentDescription="@string/app_name"
+        android:padding="8dp"
+        android:src="@drawable/ic_accept"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/colorWhite" />
+
+    <ImageView
+        android:id="@+id/iv_RejectInvitation"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/background_reject_invitation"
         android:contentDescription="@string/app_name"
-        android:padding="8sp"
+        android:padding="8dp"
         android:src="@drawable/ic_reject"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:tint="@color/colorWhite" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

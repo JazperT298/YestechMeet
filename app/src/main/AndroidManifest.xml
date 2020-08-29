@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.OutgoingInvitationActivity"></activity>
+        <activity android:name=".activities.IncomingInvitationActivity"></activity>
+        <activity android:name=".activities.OutgoingInvitationActivity" />
         <activity android:name=".activities.NotificationActivity" />
         <activity android:name=".activities.NewMessageActivity" />
         <activity android:name=".activities.MessageActivity" />
@@ -57,6 +58,14 @@
             android:name=".notifications.MyFirebaseMessaging"
             android:enabled="true"
             android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".firebase.MessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
