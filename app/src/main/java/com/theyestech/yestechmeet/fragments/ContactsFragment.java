@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -29,16 +30,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.theyestech.yestechmeet.R;
 import com.theyestech.yestechmeet.activities.MessageActivity;
+import com.theyestech.yestechmeet.activities.OutgoingInvitationActivity;
 import com.theyestech.yestechmeet.activities.SearchContactActivity;
+import com.theyestech.yestechmeet.adapters.UserContactListAdapter;
 import com.theyestech.yestechmeet.adapters.UsersAdapter;
+import com.theyestech.yestechmeet.listeners.UsersListener;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ContactsFragment extends Fragment {
+public class ContactsFragment extends Fragment implements UsersListener {
     private View view;
     private Context context;
     private FirebaseUser firebaseUser;
@@ -47,10 +53,11 @@ public class ContactsFragment extends Fragment {
     private SwipeRefreshLayout swipe_Contacts;
     private ConstraintLayout indicator_empty_chat;
     private RecyclerView rv_Contacts;
-    private FloatingActionButton fab_NewContact;
+    private FloatingActionButton fab_NewContact,iv_Conference;
     private ProgressBar progress_Contact;
-    private ArrayList<Users> usersArrayList = new ArrayList<>();
+    private List<Users> usersArrayList = new ArrayList<>();
     private UsersAdapter usersAdapter;
+    private UserContactListAdapter userContactListAdapter;
     private Users selectedUsers;
 
     private DatabaseReference usersRef, friendRequestRef, contactsRef;
@@ -65,7 +72,8 @@ public class ContactsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_contacts, container, false);
         context = getContext();
         initializeUI();
-        readAllUsers();
+        //readAllUsers();
+        getAllContacts();
         return view;
     }
 
@@ -75,6 +83,7 @@ public class ContactsFragment extends Fragment {
         rv_Contacts = view.findViewById(R.id.rv_Contacts);
         fab_NewContact = view.findViewById(R.id.fab_NewContact);
         progress_Contact = view.findViewById(R.id.progress_Contact);
+        iv_Conference = view.findViewById(R.id.iv_Conference);
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserId = firebaseAuth.getCurrentUser().getUid();
@@ -85,7 +94,7 @@ public class ContactsFragment extends Fragment {
         rv_Contacts.setHasFixedSize(true);
         rv_Contacts.setLayoutManager(new LinearLayoutManager(context));
 
-        swipe_Contacts.setOnRefreshListener(() -> readAllUsers());
+        swipe_Contacts.setOnRefreshListener(() -> getAllContacts());
         fab_NewContact.setOnClickListener(v -> {
             Intent intent = new Intent(context, SearchContactActivity.class);
             startActivity(intent);
@@ -123,6 +132,7 @@ public class ContactsFragment extends Fragment {
                                 intent.putExtra("userid", listUserId);
                                 startActivity(intent);
                             });
+
                         }
                     }
 
@@ -148,7 +158,7 @@ public class ContactsFragment extends Fragment {
 
     private static class ContactsViewHolder extends RecyclerView.ViewHolder {
         private TextView username;
-        private ImageView profile_image;
+        private ImageView profile_image, iv_VideoMeeting, iv_AudioMeeting;
         private ImageView img_on;
         private ImageView img_off;
         private ConstraintLayout constraint;
@@ -160,7 +170,82 @@ public class ContactsFragment extends Fragment {
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             constraint = itemView.findViewById(R.id.constraint);
+            iv_VideoMeeting = itemView.findViewById(R.id.iv_VideoMeeting);
+            iv_AudioMeeting = itemView.findViewById(R.id.iv_AudioMeeting);
 
+        }
+    }
+
+    private void getAllContacts() {
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                swipe_Contacts.setRefreshing(true);
+                usersArrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Users users = snapshot.getValue(Users.class);
+                    swipe_Contacts.setRefreshing(false);
+                    if (!users.getId().equals(firebaseUser.getUid())) {
+                        usersArrayList.add(users);
+                    }
+
+                }
+
+                userContactListAdapter = new UserContactListAdapter(getContext(), usersArrayList, ContactsFragment.this);
+                rv_Contacts.setAdapter(userContactListAdapter);
+                indicator_empty_chat.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void initiateVideoMeeting(Users users) {
+        if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+            Toast.makeText(getContext(), users.getName() + "is not available for meeting", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(getContext(), OutgoingInvitationActivity.class);
+            intent.putExtra("users", users);
+            intent.putExtra("type", "video");
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void initiateAudioMeeting(Users users) {
+        if (users.getToken() == null || users.getToken().trim().isEmpty()) {
+            Toast.makeText(getContext(), users.getName() + "is not available for meeting", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(getContext(), OutgoingInvitationActivity.class);
+            intent.putExtra("users", users);
+            intent.putExtra("type", "audio");
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onMultipleUsersAction(Boolean isMultipleUsersSelected) {
+        if (isMultipleUsersSelected) {
+            iv_Conference.setVisibility(View.VISIBLE);
+            fab_NewContact.setVisibility(View.GONE);
+            iv_Conference.setOnClickListener(v -> {
+                Intent intent = new Intent(getContext(), OutgoingInvitationActivity.class);
+                intent.putExtra("selectedUsers", new Gson().toJson(userContactListAdapter.getSelectedUsers()));
+                intent.putExtra("type", "video");
+                intent.putExtra("isMultiple", true);
+                startActivity(intent);
+            });
+        } else {
+            iv_Conference.setVisibility(View.GONE);
+            fab_NewContact.setVisibility(View.VISIBLE);
         }
     }
 

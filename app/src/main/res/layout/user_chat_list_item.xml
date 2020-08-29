@@ -97,6 +97,7 @@
             app:layout_constraintStart_toEndOf="@+id/last_msg"
             app:layout_constraintTop_toTopOf="@+id/last_msg" />
 
+
         <View
             android:id="@+id/view10"
             android:layout_width="match_parent"

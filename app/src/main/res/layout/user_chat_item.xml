@@ -18,6 +18,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_ImageSelected"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_user_icon"
+        android:contentDescription="@string/app_name"
+        android:padding="3dp"
+        android:src="@drawable/ic_accept"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image"
+        app:layout_constraintStart_toStartOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:tint="@color/colorWhite" />
+
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
@@ -55,6 +70,32 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image" />
+
+    <ImageView
+        android:id="@+id/iv_VideoMeeting"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:contentDescription="@string/app_name"
+        android:padding="2dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_video"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorPeterriver" />
+
+    <ImageView
+        android:id="@+id/iv_AudioMeeting"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_audio"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_VideoMeeting"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorPeterriver" />
 
     <View
         android:id="@+id/view10"
