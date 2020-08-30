@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserId;
 
     private PreferenceManager preferenceManager;
+    private Users users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

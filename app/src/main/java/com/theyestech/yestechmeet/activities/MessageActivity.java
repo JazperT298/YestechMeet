@@ -128,7 +128,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
                 Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent(context, OutgoingInvitationActivity.class);
-                intent.putExtra("userid", userid);
+                intent.putExtra("users", users);
                 intent.putExtra("type", "video");
                 startActivity(intent);
             }
@@ -138,7 +138,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
                 Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent(context, OutgoingInvitationActivity.class);
-                intent.putExtra("userid", userid);
+                intent.putExtra("users", users);
                 intent.putExtra("type", "audio");
                 startActivity(intent);
             }

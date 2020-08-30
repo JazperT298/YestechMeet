@@ -75,8 +75,8 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
         tv_Email = findViewById(R.id.tv_Email);
         iv_StopInvitation = findViewById(R.id.iv_StopInvitation);
 
-        userid = getIntent().getStringExtra("userid");
-        //users = (Users) getIntent().getSerializableExtra("users");
+        //userid = getIntent().getStringExtra("userid");
+        users = (Users) getIntent().getParcelableExtra("users");
         meetingType = getIntent().getStringExtra("type");
 
         if (meetingType != null) {
@@ -86,26 +86,32 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
                 iV_MeetingType.setImageResource(R.drawable.ic_audio);
             }
         }
-        if (userid != null) {
-            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    users = dataSnapshot.getValue(Users.class);
-                    tv_Username.setText(users.getName());
-                    tv_Email.setText(users.getEmail());
-                    Glide.with(getApplicationContext())
-                            .load(users.getProfilePhoto())
-                            .apply(GlideOptions.getOptions())
-                            .into(iv_ProfileImage);
-                    token = users.getToken();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
+        if (users != null) {
+            tv_Username.setText( users.getName());
+            tv_Email.setText(users.getEmail());
+            Glide.with(getApplicationContext())
+                    .load(users.getProfilePhoto())
+                    .apply(GlideOptions.getOptions())
+                    .into(iv_ProfileImage);
+//            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
+//            reference.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    users = dataSnapshot.getValue(Users.class);
+//                    tv_Username.setText(users.getName());
+//                    tv_Email.setText(users.getEmail());
+//                    Glide.with(getApplicationContext())
+//                            .load(users.getProfilePhoto())
+//                            .apply(GlideOptions.getOptions())
+//                            .into(iv_ProfileImage);
+//                    token = users.getToken();
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
         }
         iv_StopInvitation.setOnClickListener(v -> {
             if (getIntent().getBooleanExtra("isMultiple", false)) {
@@ -114,7 +120,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
                 ArrayList<Users> receivers = new Gson().fromJson(getIntent().getStringExtra("selectedUsers"), type);
                 cancelInvitation(null, receivers);
             } else {
-                if (userid != null) {
+                if (users != null) {
                     cancelInvitation(users.getToken(), null);
                 }
             }
@@ -133,9 +139,9 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
                         }
                         initiateMeeting(meetingType, null, receivers);
                     } else {
-                        if (userid != null) {
+                        if (users != null) {
                             totalReceivers = 1;
-                            initiateMeeting(meetingType,token, null);
+                            initiateMeeting(meetingType,users.getToken(), null);
                         }
                     }
                 }

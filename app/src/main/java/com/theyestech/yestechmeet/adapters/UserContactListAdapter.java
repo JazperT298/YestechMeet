@@ -21,8 +21,6 @@ import com.theyestech.yestechmeet.utils.GlideOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.webrtc.ContextUtils.getApplicationContext;
-
 public class UserContactListAdapter extends RecyclerView.Adapter<UserContactListAdapter.UsersViewHolder> {
     private List<Users> users;
     private UsersListener usersListener;
