@@ -38,6 +38,7 @@ import com.theyestech.yestechmeet.activities.SearchContactActivity;
 import com.theyestech.yestechmeet.adapters.UserContactListAdapter;
 import com.theyestech.yestechmeet.adapters.UsersAdapter;
 import com.theyestech.yestechmeet.listeners.UsersListener;
+import com.theyestech.yestechmeet.models.Contacts;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
@@ -64,6 +65,8 @@ public class ContactsFragment extends Fragment implements UsersListener {
     private FirebaseAuth firebaseAuth;
     private String currentUserId;
     private String userName = "", profileImage = "", calledBy = "";
+
+    private List<Contacts> contactsList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,6 +102,25 @@ public class ContactsFragment extends Fragment implements UsersListener {
             Intent intent = new Intent(context, SearchContactActivity.class);
             startActivity(intent);
         });
+
+
+        DatabaseReference references = FirebaseDatabase.getInstance().getReference("Contacts").child(currentUserId);
+        references.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                contactsList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Contacts contactList = snapshot.getValue(Contacts.class);
+                    contactsList.add(contactList);
+                }
+                getAllContacts();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void readAllUsers() {
@@ -132,10 +154,8 @@ public class ContactsFragment extends Fragment implements UsersListener {
                                 intent.putExtra("userid", listUserId);
                                 startActivity(intent);
                             });
-
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -188,9 +208,14 @@ public class ContactsFragment extends Fragment implements UsersListener {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users users = snapshot.getValue(Users.class);
                     swipe_Contacts.setRefreshing(false);
-                    if (!users.getId().equals(firebaseUser.getUid())) {
-                        usersArrayList.add(users);
+                    for(Contacts contacts : contactsList){
+                        if(users.getId().equals(contacts.getId())){
+                            usersArrayList.add(users);
+                        }
                     }
+//                    if (!users.getId().equals(firebaseUser.getUid())) {
+//                        usersArrayList.add(users);
+//                    }
 
                 }
 

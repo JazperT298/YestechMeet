@@ -78,18 +78,8 @@ public class NotificationActivity extends AppCompatActivity {
         indicator_empty_chat = findViewById(R.id.view_EmptyChat);
         rv_Notification = findViewById(R.id.rv_Notification);
 
-        iv_Back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        swipe_Notification.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getAllNotifications();
-            }
-        });
+        iv_Back.setOnClickListener(v -> finish());
+        swipe_Notification.setOnRefreshListener(() -> getAllNotifications());
         getAllNotifications();
     }
 
@@ -194,10 +184,10 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void acceptFriendRequest(final String userid) {
-        contactsRef.child(currentUserId).child(userid).child("Contacts").setValue("Saved")
+        contactsRef.child(currentUserId).child(userid).child("id").setValue(userid)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        contactsRef.child(userid).child(currentUserId).child("Contacts").setValue("Saved")
+                        contactsRef.child(userid).child(currentUserId).child("id").setValue(currentUserId)
                                 .addOnCompleteListener(task13 -> {
                                     if (task13.isSuccessful()) {
                                         friendRequestRef.child(currentUserId).child(userid).removeValue()
