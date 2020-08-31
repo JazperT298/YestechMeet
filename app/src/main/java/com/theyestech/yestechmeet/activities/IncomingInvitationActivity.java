@@ -20,6 +20,7 @@ import com.theyestech.yestechmeet.R;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.services.ApiClient;
 import com.theyestech.yestechmeet.services.ApiService;
+import com.theyestech.yestechmeet.services.ApiServices;
 import com.theyestech.yestechmeet.utils.Constants;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
@@ -109,7 +110,7 @@ public class IncomingInvitationActivity extends AppCompatActivity {
     }
 
     private void sendRemoteMessage(String remoteMessageBody, String type) {
-        ApiClient.getClient().create(ApiService.class).sendRemoteMessage(Constants.getRemoteMessageHeader(), remoteMessageBody)
+        ApiClient.getClient().create(ApiServices.class).sendRemoteMessage(Constants.getRemoteMessageHeader(), remoteMessageBody)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

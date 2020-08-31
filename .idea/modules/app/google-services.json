@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "862842171838",
+    "firebase_url": "https://yestechmeet.firebaseio.com",
+    "project_id": "yestechmeet",
+    "storage_bucket": "yestechmeet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862842171838:android:c4ffb105765e905db309ef",
+        "android_client_info": {
+          "package_name": "com.theyestech.yestechmeet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862842171838-7auhcb9ogoirjna43020to0dp22a5e79.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theyestech.yestechmeet",
+            "certificate_hash": "44ede306cd621ceb9c12a29ce32d9d7ffc462361"
+          }
+        },
+        {
+          "client_id": "862842171838-46qqsjnpe87rfalgpa85haud85pmj0tt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEBDPe0qlPkYgSNvyG2Hvvka7GCseNs_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862842171838-46qqsjnpe87rfalgpa85haud85pmj0tt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

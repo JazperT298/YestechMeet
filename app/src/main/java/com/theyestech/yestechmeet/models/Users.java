@@ -13,9 +13,10 @@ public class Users implements Parcelable {
     private String status;
     private String search;
     private String token;
+    private String fcm_token;
 
 
-    public Users(String id, String username, String name, String email, String profilePhoto, String state, String status, String search,String token) {
+    public Users(String id, String username, String name, String email, String profilePhoto, String state, String status, String search,String token,String fcm_token) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -25,6 +26,7 @@ public class Users implements Parcelable {
         this.status = status;
         this.search = search;
         this.token = token;
+        this.fcm_token = fcm_token;
     }
 
     public Users() {
@@ -40,6 +42,7 @@ public class Users implements Parcelable {
         status = in.readString();
         search = in.readString();
         token = in.readString();
+        fcm_token = in.readString();
     }
 
     public static final Creator<Users> CREATOR = new Creator<Users>() {
@@ -126,6 +129,14 @@ public class Users implements Parcelable {
         this.token = token;
     }
 
+    public String getFcm_token() {
+        return fcm_token;
+    }
+
+    public void setFcm_token(String fcm_token) {
+        this.fcm_token = fcm_token;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -142,5 +153,6 @@ public class Users implements Parcelable {
         dest.writeString(status);
         dest.writeString(search);
         dest.writeString(token);
+        dest.writeString(fcm_token);
     }
 }

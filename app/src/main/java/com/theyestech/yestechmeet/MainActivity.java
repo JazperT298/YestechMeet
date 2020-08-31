@@ -31,7 +31,6 @@ import com.theyestech.yestechmeet.activities.StartActivity;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.Constants;
 import com.theyestech.yestechmeet.utils.GlideOptions;
-import com.theyestech.yestechmeet.utils.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference reference,usersRef;
     private String currentUserId;
 
-    private PreferenceManager preferenceManager;
     private Users users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         initializeUI();
-
-        preferenceManager = new PreferenceManager(context);
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
