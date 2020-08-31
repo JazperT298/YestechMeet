@@ -13,8 +13,7 @@
         android:background="@color/colorGrey"
         app:layout_constraintBottom_toTopOf="@+id/swipe_Contacts"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_Contacts"

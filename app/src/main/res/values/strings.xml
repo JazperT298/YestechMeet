@@ -27,5 +27,7 @@
     <string name="FCM_PREF">com.theyestech.yestechmeet.fcm_pref</string>
     <string name="FCM_TOKEN">com.theyestech.yestechmeet.fcm_token</string>
     <string name="incoming_meeting_invitation">Incoming Meeting Invitation</string>
+    <string name="new_meeting">New Meeting</string>
+    <string name="join_with_a_code">Join with a code</string>
 
 </resources>
