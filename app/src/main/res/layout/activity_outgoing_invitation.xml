@@ -72,8 +72,8 @@
 
     <ImageView
         android:id="@+id/iv_StopInvitation"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/background_reject_invitation"
         android:contentDescription="@string/app_name"

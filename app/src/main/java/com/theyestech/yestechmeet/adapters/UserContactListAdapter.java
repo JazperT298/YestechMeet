@@ -42,7 +42,7 @@ public class UserContactListAdapter extends RecyclerView.Adapter<UserContactList
     @NonNull
     @Override
     public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new UsersViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.user_chat_item, parent, false));
+        return new UsersViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.user_contact_item, parent, false));
     }
 
     @Override
