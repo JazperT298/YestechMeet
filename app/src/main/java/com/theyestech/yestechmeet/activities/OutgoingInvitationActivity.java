@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,12 +56,13 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
     private TextView tv_Username, tv_Email;
     private String meetingType = null;
     private Users users;
-    private String userid, token;
+    private String userid, token, id, username, email, profilephoto;
 
     private String inviterToken = null, meetingRoom = null;
     private int rejectionCount = 0;
     private int totalReceivers = 0;
     private DatabaseReference reference;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,23 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
         users = (Users) getIntent().getParcelableExtra("users");
         meetingType = getIntent().getStringExtra("type");
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Users users = snapshot.getValue(Users.class);
+                id = users.getId();
+                username = users.getUsername();
+                email = users.getEmail();
+                profilephoto = users.getProfilePhoto();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         if (meetingType != null) {
             if (meetingType.equals("video")) {
                 iV_MeetingType.setImageResource(R.drawable.ic_video);
@@ -176,12 +196,12 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
 
             data.put(Constants.REMOTE_MSG_TYPE, Constants.REMOTE_MSG_INVITATION);
             data.put(Constants.REMOTE_MSG_MEETING_TYPE, meetingType);
-            data.put(Constants.KEY_FIRST_NAME, users.getName());
-            data.put(Constants.KEY_PROFILE_IMAGE, users.getProfilePhoto());
-            data.put(Constants.KEY_EMAIL, users.getEmail());
+            data.put(Constants.KEY_FIRST_NAME, username);
+            data.put(Constants.KEY_PROFILE_IMAGE, profilephoto);
+            data.put(Constants.KEY_EMAIL, email);
             data.put(Constants.REMOTE_MSG_INVITER_TOKEN, inviterToken);
 
-            meetingRoom = users.getId() + "_" + UUID.randomUUID().toString().substring(0, 5);
+            meetingRoom = id + "_" + UUID.randomUUID().toString().substring(0, 5);
             data.put(Constants.REMOTE_MSG_MEETING_ROOM, meetingRoom);
 
             body.put(Constants.REMOTE_MSG_DATA, data);
