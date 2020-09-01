@@ -123,8 +123,8 @@ public class NewMessageActivity extends AppCompatActivity {
         rv_user = findViewById(R.id.rv_user);
         rv_chat = findViewById(R.id.rv_chat);
         iv_File = findViewById(R.id.iv_File);
-        et_message = findViewById(R.id.et_message);
-        btn_sends = findViewById(R.id.btn_sends);
+        et_message = findViewById(R.id.text_send);
+        btn_sends = findViewById(R.id.btn_send);
         iv_Image = findViewById(R.id.iv_Image);
         iv_Close = findViewById(R.id.iv_Close);
         suggested = findViewById(R.id.suggested);
@@ -153,7 +153,14 @@ public class NewMessageActivity extends AppCompatActivity {
             if (!doneSelecting) {
                 Toasty.warning(context, "Please select one of your contacts.").show();
             } else {
-                sendUserMessage(firebaseUser.getUid(), receiverId, et_message.getText().toString(), currentDate);
+                notify = true;
+                String msg = et_message.getText().toString();
+                if (!msg.equals("")){
+                    sendUserMessage(firebaseUser.getUid(), userid, msg, currentDate);
+                } else {
+                    Toasty.warning(context, "You can't send empty message").show();
+                }
+                et_message.setText("");
             }
         });
 

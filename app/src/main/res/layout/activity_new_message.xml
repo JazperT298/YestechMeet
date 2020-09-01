@@ -17,9 +17,9 @@
 
         <ImageView
             android:id="@+id/iv_Back"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:scaleType="center"
             android:src="@drawable/ic_arrow_back_white_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
             android:id="@+id/appCompatButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:text="New Message"
             android:textSize="16sp"
             android:textColor="@color/colorWhite"
@@ -73,7 +73,7 @@
     <View
         android:id="@+id/view1"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.01dp"
         android:background="@color/colorGrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +203,7 @@
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.01dp"
         android:background="@color/colorGrey"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout43"
         app:layout_constraintEnd_toEndOf="parent"
@@ -213,7 +213,6 @@
         android:id="@+id/constraintLayout43"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:background="@color/footerBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -221,8 +220,8 @@
 
         <ImageView
             android:id="@+id/imageView15s"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_File"
             app:layout_constraintEnd_toEndOf="@+id/iv_File"
             app:layout_constraintStart_toStartOf="@+id/iv_File"
@@ -230,20 +229,18 @@
             app:srcCompat="@drawable/bf_round_blue" />
         <ImageView
             android:id="@+id/iv_File"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_add_white_24dp" />
 
         <EditText
-            android:id="@+id/et_message"
+            android:id="@+id/text_send"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
             android:background="@drawable/bg_edittext2"
             android:ems="10"
             android:gravity="top"
@@ -254,30 +251,30 @@
             android:textColor="@color/colorWhite"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_sends"
+            app:layout_constraintEnd_toStartOf="@+id/btn_send"
             app:layout_constraintStart_toEndOf="@+id/iv_File"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView15ss"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_sends"
-            app:layout_constraintEnd_toEndOf="@+id/btn_sends"
-            app:layout_constraintStart_toStartOf="@+id/btn_sends"
-            app:layout_constraintTop_toTopOf="@+id/btn_sends"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_send"
+            app:layout_constraintEnd_toEndOf="@+id/btn_send"
+            app:layout_constraintStart_toStartOf="@+id/btn_send"
+            app:layout_constraintTop_toTopOf="@+id/btn_send"
             app:srcCompat="@drawable/bf_round_blue" />
         <ImageView
-            android:id="@+id/btn_sends"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:scaleType="centerCrop"
+            android:id="@+id/btn_send"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            android:scaleType="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_send_white_24dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
