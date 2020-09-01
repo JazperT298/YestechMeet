@@ -121,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
                     } else {
+                        progressDialog.dismiss();
                         Toast.makeText(context, "You can't register with this email or password", Toast.LENGTH_SHORT).show();
                     }
                 });

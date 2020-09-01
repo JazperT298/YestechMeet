@@ -36,6 +36,7 @@ import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import es.dmoral.toasty.Toasty;
 
@@ -71,6 +72,7 @@ public class SearchContactActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserId = firebaseAuth.getCurrentUser().getUid();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend Request");
         contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
 
@@ -340,5 +342,26 @@ public class SearchContactActivity extends AppCompatActivity {
                                 });
                     }
                 });
+    }
+
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
     }
 }

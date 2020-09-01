@@ -153,8 +153,10 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, Object> map = new HashMap<>();
 
         map.put("token", token);
+        map.put("fcm_token", token);
         reference.updateChildren(map);
     }
+
 
     private void openLogoutDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
@@ -166,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     // change this code beacuse your app will crash
                     reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                     HashMap<String, Object> map = new HashMap<>();
+                    map.put("token", "");
                     map.put(Constants.KEY_FCM_TOKEN, "");
                     reference.updateChildren(map);
 
@@ -175,6 +178,27 @@ public class MainActivity extends AppCompatActivity {
                 .create();
         dialog.show();
     }
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
+
 
 
 }

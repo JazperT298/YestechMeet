@@ -37,6 +37,7 @@ import com.theyestech.yestechmeet.notifications.Token;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class ChatFragment extends Fragment {
     private View view;
@@ -203,14 +204,4 @@ public class ChatFragment extends Fragment {
         reference.child(firebaseUser.getUid()).setValue(token1);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //getAllChats();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 }

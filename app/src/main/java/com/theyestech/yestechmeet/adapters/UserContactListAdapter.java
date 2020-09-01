@@ -1,6 +1,7 @@
 package com.theyestech.yestechmeet.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.ValueEventListener;
 import com.theyestech.yestechmeet.R;
+import com.theyestech.yestechmeet.activities.MessageActivity;
 import com.theyestech.yestechmeet.listeners.UsersListener;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
@@ -81,7 +83,7 @@ public class UserContactListAdapter extends RecyclerView.Adapter<UserContactList
             iv_AudioMeeting.setOnClickListener(v -> usersListener.initiateAudioMeeting(users));
             iv_VideoMeeting.setOnClickListener(v -> usersListener.initiateVideoMeeting(users));
 
-            constraint.setOnLongClickListener(v -> {
+            profile_image.setOnLongClickListener(v -> {
                 if (iv_ImageSelected.getVisibility() != View.VISIBLE) {
                     selectedUsers.add(users);
                     iv_ImageSelected.setVisibility(View.VISIBLE);
@@ -91,7 +93,7 @@ public class UserContactListAdapter extends RecyclerView.Adapter<UserContactList
                 }
                 return true;
             });
-            constraint.setOnClickListener(v -> {
+            profile_image.setOnClickListener(v -> {
                 if (iv_ImageSelected.getVisibility() == View.VISIBLE) {
                     selectedUsers.remove(users);
                     iv_ImageSelected.setVisibility(View.GONE);
@@ -108,6 +110,11 @@ public class UserContactListAdapter extends RecyclerView.Adapter<UserContactList
                         iv_AudioMeeting.setVisibility(View.GONE);
                     }
                 }
+            });
+            constraint.setOnClickListener(v -> {
+                Intent intent = new Intent(context, MessageActivity.class);
+                intent.putExtra("userid", users.getId());
+                context.startActivity(intent);
             });
         }
     }

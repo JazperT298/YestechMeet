@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -63,6 +64,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
     private int totalReceivers = 0;
     private DatabaseReference reference;
     private FirebaseUser firebaseUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,5 +317,26 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(invitationResponseReceiver);
+    }
+
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+
+        reference.updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
     }
 }
