@@ -1,6 +1,7 @@
 package com.theyestech.yestechmeet.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -86,7 +88,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
     private UsersListener usersListener;
     private Users users;
     private String token;
-
+    private Chat chat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +140,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
                         break;
 
                     case R.id.archive_conversation:
-                        Toasty.info(context, "Wala pa ne").show();
+                        openArchiveDialog();
                         break;
                 }
                 return true;
@@ -305,7 +307,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatArrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Chat chat = snapshot.getValue(Chat.class);
+                    chat = snapshot.getValue(Chat.class);
                     if (chat.getReceiverId().equals(myid) && chat.getSenderId().equals(userid) ||
                             chat.getReceiverId().equals(userid) && chat.getSenderId().equals(myid)) {
                         chatArrayList.add(chat);
@@ -417,11 +419,40 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
                 .setMessage("Are you sure you want to delete conversation?")
                 .setPositiveButton("YES", (dialog1, which) -> {
                     // change this code beacuse your app will crash
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                    DatabaseReference chatlist = FirebaseDatabase.getInstance().getReference().child("Chatlist").child(fuser.getUid()).child(userid);
+                    Query chatemessage = FirebaseDatabase.getInstance().getReference().child("Chats").orderByChild("receiverId").equalTo(userid);
+                    chatemessage.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot chatSnapshot: snapshot.getChildren()) {
+                                chatSnapshot.getRef().removeValue();
+                            }
+                        }
 
-                    ref.child("Chatlist").child(fuser.getUid()).child(userid).child("id").equalTo(userid);
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    chatlist.removeValue();
                     finish();
 //                    startActivity(new Intent(context, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
+    }
+
+    private void openArchiveDialog(){
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Archive Conversation")
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setMessage("Move conversation to archive?")
+                .setPositiveButton("YES", (dialog1, which) -> {
+                    // change this code beacuse your app will crash
+                    DatabaseReference data = FirebaseDatabase.getInstance().getReference().child("Chatlist").child(fuser.getUid()).child(userid);
+                    data.removeValue();
+                    finish();
                 })
                 .setNegativeButton("NO", null)
                 .create();
