@@ -55,10 +55,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         holder.show_message.setText(chat.getMessage());
         //holder.date.setText(DateTimeHandler.getMessageDateDisplay(chat.getMessageDateCreated()));
-        Glide.with(mContext)
-                .load(imageurl)
-                .apply(GlideOptions.getOptions())
-                .into(holder.profile_image);
+        if(imageurl.equals("default")){
+            Glide.with(mContext).load(R.drawable.ic_account).into(holder.profile_image);
+        }else {
+            Glide.with(mContext)
+                    .load(imageurl)
+                    .apply(GlideOptions.getOptions())
+                    .into(holder.profile_image);
+        }
+
 
         if (position == chatArrayList.size()-1){
             if (chat.isIsseen()){

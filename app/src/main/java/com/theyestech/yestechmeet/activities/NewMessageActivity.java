@@ -3,13 +3,22 @@ package com.theyestech.yestechmeet.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +31,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageTask;
 import com.theyestech.yestechmeet.R;
 import com.theyestech.yestechmeet.adapters.MessageAdapter;
 import com.theyestech.yestechmeet.adapters.UserContactsAdapter;
@@ -47,10 +58,14 @@ import com.theyestech.yestechmeet.services.Client;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 import com.theyestech.yestechmeet.utils.KeyboardHandler;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
@@ -99,6 +114,29 @@ public class NewMessageActivity extends AppCompatActivity {
     private UserContactsAdapter userContactsAdapter;
     private Users users;
 
+    private static final int STORAGE_REQUEST_CODE = 400;
+    private static final int IMAGE_PICK_GALLERY_CODE = 1000;
+
+    private static final int VIDEO_PERMISSION_CODE = 2000;
+    private static final int VIDEO_REQUEST_CODE = 3000;
+
+    private static final int CAMERA_PERMISSION_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 102;
+    private static final int DOCUMENT_PERMISSION_CODE = 103;
+    private static final int DOCUMENT_REQUEST_CODE = 104;
+
+    private static final int IMAGE_REQUEST = 1;
+    private Uri imageUri;
+    private StorageTask uploadTask;
+    private String storagePermission[];
+    private String cameraPermission[];
+    private Uri selectedFile;
+    private String selectedFilePath = "";
+    private String displayName = "";
+    private File myFile;
+
+    private BottomSheetDialog bottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +176,8 @@ public class NewMessageActivity extends AppCompatActivity {
         contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
         currentDate = Calendar.getInstance().getTime();
 
         rv_user.setHasFixedSize(true);
@@ -170,7 +210,7 @@ public class NewMessageActivity extends AppCompatActivity {
             rv_chat.setVisibility(View.GONE);
             readAllUsers();
             et_SearchUser.setText("");
-            iv_Image.setImageResource(R.drawable.user1);
+            iv_Image.setImageResource(R.drawable.ic_account);
         });
 
         et_SearchUser.addTextChangedListener(new TextWatcher() {
@@ -201,11 +241,16 @@ public class NewMessageActivity extends AppCompatActivity {
                 receiverId = selectedUsers.getId();
                 doneSelecting = true;
                 rv_chat.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(selectedUsers.getProfilePhoto())
+                        .apply(GlideOptions.getOptions())
+                        .into(iv_Image);
                 readUserMessages(firebaseUser.getUid(), receiverId, selectedUsers.getProfilePhoto());
             }
 
             KeyboardHandler.closeKeyboard(et_SearchUser, context);
         });
+        iv_File.setOnClickListener(v -> openBottomSheetDialog());
     }
 
     private void readAllUsers() {
@@ -453,6 +498,138 @@ public class NewMessageActivity extends AppCompatActivity {
         super.onPause();
         status("offline");
     }
+    private void openBottomSheetDialog(){
+
+        View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_chose_photo, null);
+
+        ConstraintLayout constraint1 = view.findViewById(R.id.constraint1);
+        ConstraintLayout constraint2 = view.findViewById(R.id.constraint2);
+        constraint1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askCameraPermissions();
+                bottomSheetDialog.dismiss();
+            }
+        });
+        constraint2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!checkStoragePermission()) {
+                    requestStoragePermission();
+                } else {
+                    selectedFilePath = "";
+                    pickImageGallery();
+                }
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(view);
+
+        bottomSheetDialog.show();
+    }
+
+    private void askCameraPermissions(){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        }else  {
+            pickCamera();
+        }
+    }
+
+    private void requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
+    }
+
+    private boolean checkStoragePermission() {
+        boolean result = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result;
+    }
+
+    private void pickImageGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
+    }
+
+    private void pickCamera(){
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case STORAGE_REQUEST_CODE:
+                if (grantResults.length > 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickImageGallery();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case CAMERA_PERMISSION_CODE:
+                if (grantResults.length < 0) {
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageAccepted) {
+                        pickCamera();
+                    } else {
+                        Toasty.error(context, "Permission denied ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IMAGE_PICK_GALLERY_CODE && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            imageUri = data.getData();
+//
+//            iv_Images.setImageURI(imageUri);
+//            Glide.with(getApplicationContext())
+//                    .load(imageUri)
+//                    .apply(GlideOptions.getOptions())
+//                    .into(iv_userImages);
+
+        }else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+
+            Random r = new Random();
+            int randomNumber = r.nextInt(10000);
+            selectedFilePath = String.valueOf(randomNumber);
+            File filesDir = getApplicationContext().getFilesDir();
+            myFile = new File(filesDir, selectedFilePath + ".jpg");
+
+//            //iv_UserProfileImage.setImageBitmap(image);
+//            iv_Image.setImageBitmap(image);
+//            Glide.with(context)
+//                    .load(selectedFile)
+//                    .apply(GlideOptions.getOptions())
+//                    .into(iv_userImages);
+
+            OutputStream os;
+            try {
+                os = new FileOutputStream(myFile);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                os.flush();
+                os.close();
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+            }
+        }
+    }
+
 
 
 }

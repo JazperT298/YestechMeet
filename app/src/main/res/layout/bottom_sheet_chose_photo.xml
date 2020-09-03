@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
+    android:background="@color/footerBackground"
     android:padding="16dp">
 
     <TextView
@@ -12,20 +13,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choose File"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_Close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_close_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView1">
+
+    </ImageView>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:background="@color/colorGrey"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="43dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint1"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1">
+        app:layout_constraintTop_toBottomOf="@+id/view1">
 
         <ImageView
             android:id="@+id/imageView"
@@ -43,6 +68,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Camera"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
             android:layout_marginStart="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
@@ -50,6 +77,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:background="@color/colorGrey"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="43dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraint1" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint2"
         android:layout_width="match_parent"
@@ -60,7 +97,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraint1">
+        app:layout_constraintTop_toBottomOf="@+id/view2">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -79,10 +116,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:text="Gallery"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:background="@color/colorGrey"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraint2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

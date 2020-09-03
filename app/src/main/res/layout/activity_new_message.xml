@@ -95,14 +95,14 @@
             app:layout_constraintEnd_toEndOf="@+id/iv_Image"
             app:layout_constraintStart_toStartOf="@+id/iv_Image"
             app:layout_constraintTop_toTopOf="@+id/iv_Image"
-            app:srcCompat="@drawable/bg_round_white" />
+            app:srcCompat="@drawable/bg_round_black" />
 
         <ImageView
             android:id="@+id/iv_Image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/user1"
+            android:src="@drawable/ic_account"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
