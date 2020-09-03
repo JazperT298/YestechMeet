@@ -12,6 +12,20 @@
         android:id="@+id/iv_ProfileEducatorImage"
         android:src="@drawable/chat_logo1"/>
 
+
+    <ImageView
+        android:id="@+id/iv_More"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/show_message"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:layout_toStartOf="@+id/show_message"
+        android:src="@drawable/ic_more_vert_black_24dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

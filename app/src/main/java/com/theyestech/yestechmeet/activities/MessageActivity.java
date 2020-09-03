@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -43,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageTask;
 import com.theyestech.yestechmeet.R;
 import com.theyestech.yestechmeet.adapters.MessageAdapter;
+import com.theyestech.yestechmeet.interfaces.OnClickRecyclerView;
 import com.theyestech.yestechmeet.listeners.UsersListener;
 import com.theyestech.yestechmeet.models.Chat;
 import com.theyestech.yestechmeet.models.Users;
@@ -88,6 +91,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
     private ArrayList<Chat> chatArrayList;
     private String userid;
     private Date currentDate;
+    private Chat selectedChat;
 
     private Intent intent;
 
@@ -128,6 +132,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
     private File myFile;
 
     private BottomSheetDialog bottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -354,6 +359,32 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
                     }
 
                     messageAdapter = new MessageAdapter(context, chatArrayList, imageurl);
+                    messageAdapter.setClickListener(new OnClickRecyclerView() {
+                        @Override
+                        public void onItemClick(View view, int position, int fromButton) {
+                            selectedChat = chatArrayList.get(position);
+                            Debugger.logD("ID " + selectedChat.getMessage());
+                            Snackbar.make(view, "Remove message?", Snackbar.LENGTH_LONG)
+                                    .setActionTextColor(Color.GREEN)
+                                    .setAction("Confirm", v -> {
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                                        Query messageQuery = ref.child("Chats").orderByChild("message").equalTo(selectedChat.getMessage());
+
+                                        messageQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot1) {
+                                                for (DataSnapshot chatSnapshot : dataSnapshot1.getChildren()) {
+                                                    chatSnapshot.getRef().removeValue();
+                                                }
+                                            }
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+                                    }).show();
+
+                        }
+                    });
                     recyclerView.setAdapter(messageAdapter);
                 }
             }
@@ -464,7 +495,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
                     chatemessage.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot chatSnapshot: snapshot.getChildren()) {
+                            for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
                                 chatSnapshot.getRef().removeValue();
                             }
                         }
@@ -483,7 +514,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
         dialog.show();
     }
 
-    private void openArchiveDialog(){
+    private void openArchiveDialog() {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Archive Conversation")
                 .setIcon(R.drawable.ic_baseline_warning_24)
@@ -571,7 +602,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
 //        }
     }
 
-    private void openBottomSheetDialog(){
+    private void openBottomSheetDialog() {
 
         View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_chose_photo, null);
 
@@ -598,10 +629,11 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
 
         bottomSheetDialog.show();
     }
-    private void askCameraPermissions(){
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-        }else  {
+
+    private void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
             pickCamera();
         }
     }
@@ -621,9 +653,9 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
-    private void pickCamera(){
+    private void pickCamera() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
+        startActivityForResult(takePicture, CAMERA_REQUEST_CODE);//
     }
 
 
@@ -659,7 +691,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMAGE_PICK_GALLERY_CODE && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+                && data != null && data.getData() != null) {
             imageUri = data.getData();
 
 //            iv_Images.setImageURI(imageUri);
@@ -668,8 +700,8 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
 //                    .apply(GlideOptions.getOptions())
 //                    .into(iv_userImages);
 
-        }else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Bitmap image = (Bitmap) data.getExtras().get("data");
 

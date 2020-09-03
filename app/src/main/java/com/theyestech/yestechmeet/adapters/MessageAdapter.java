@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.theyestech.yestechmeet.R;
+import com.theyestech.yestechmeet.interfaces.OnClickRecyclerView;
 import com.theyestech.yestechmeet.models.Chat;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
@@ -27,6 +28,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private Context mContext;
     private ArrayList<Chat> chatArrayList;
     private String imageurl;
+    private OnClickRecyclerView onClickRecyclerView;
 
     FirebaseUser fuser;
 
@@ -87,6 +89,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public TextView show_message;
         public ImageView profile_image;
         public TextView txt_seen;
+        public ImageView iv_More;
         //private TextView date;
 
         public ViewHolder(View itemView) {
@@ -95,6 +98,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             show_message = itemView.findViewById(R.id.show_message);
             profile_image = itemView.findViewById(R.id.iv_ProfileEducatorImage);
             txt_seen = itemView.findViewById(R.id.txt_seen);
+            iv_More = itemView.findViewById(R.id.iv_More);
+            iv_More.setOnClickListener(v -> {
+                if (onClickRecyclerView != null)
+                    onClickRecyclerView.onItemClick(v, getAdapterPosition(), 1);
+            });
+
             //date = itemView.findViewById(R.id.date);
         }
     }
@@ -107,5 +116,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         } else {
             return MSG_TYPE_LEFT;
         }
+    }
+    public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
+        this.onClickRecyclerView = onClickRecyclerView;
     }
 }
