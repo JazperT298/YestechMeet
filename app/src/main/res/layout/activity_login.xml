@@ -23,7 +23,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/chat_icons" />
+                android:src="@drawable/sessionlogos" />
 
             <View
                 android:layout_width="0dp"

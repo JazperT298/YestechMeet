@@ -32,10 +32,10 @@ public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeL
     private Button btn_NewMeeting, btn_JoinMeeting;
 
 
-    int[] mResources = {R.drawable.nayeon, R.drawable.mina
+    int[] mResources = {R.drawable.yestechsessions1, R.drawable.yestechsessions3
     };
-    String[] mTitle = {"Get a link that you can share"," Your meting is safe"};
-    String[] mDescription = {"Tap New meeting to gte a link that you can send to people that you want to meet with","No one can join a meeting unless invited or admitted by the host"};
+    String[] mTitle = {"Create a link","Secure Sessions"};
+    String[] mDescription = {"Tap New session to create a link that you can share to friends or people you want to join the session","Your session is safe and is restricted form others unless you have given access to the person entering the session"};
 
     ViewPager mViewPager;
     private CustomPagerAdapter mAdapter;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YestechMeet</string>
+    <string name="app_name">Sessions</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -31,5 +31,6 @@
     <string name="join_with_a_code">Join with a code</string>
     <string name="delete_conversation">Delete Conversation</string>
     <string name="archive_conversation">Archive Conversation</string>
+    <string name="new_session">New session</string>
 
 </resources>

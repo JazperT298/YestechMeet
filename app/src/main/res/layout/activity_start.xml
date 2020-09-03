@@ -18,44 +18,45 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="280dp"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
+            android:background="@drawable/sessionlogos"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="220dp"
-                android:layout_height="250dp"
-                android:src="@drawable/chat_icons"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView"-->
+<!--                android:layout_width="220dp"-->
+<!--                android:layout_height="250dp"-->
+<!--                android:src="@drawable/chat_icons"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
 
-            </ImageView>
+<!--            </ImageView>-->
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
-                android:layout_marginBottom="18dp"
-                android:src="@drawable/calls"
-                app:layout_constraintBottom_toBottomOf="@+id/text"
-                app:layout_constraintEnd_toEndOf="parent">
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView2"-->
+<!--                android:layout_width="125dp"-->
+<!--                android:layout_height="125dp"-->
+<!--                android:layout_marginBottom="18dp"-->
+<!--                android:src="@drawable/calls"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/text"-->
+<!--                app:layout_constraintEnd_toEndOf="parent">-->
 
-            </ImageView>
+<!--            </ImageView>-->
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/yestech_meet"
-                android:textColor="@color/colorWhite"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+<!--            <TextView-->
+<!--                android:id="@+id/text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/yestech_meet"-->
+<!--                android:textColor="@color/colorWhite"-->
+<!--                android:textSize="30sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/imageView"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/imageView" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
