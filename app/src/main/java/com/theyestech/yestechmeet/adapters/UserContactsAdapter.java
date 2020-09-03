@@ -49,7 +49,7 @@ public class UserContactsAdapter extends RecyclerView.Adapter<UserContactsAdapte
         holder.username.setText(users.getName());
         if(users.getProfilePhoto().equals("default")){
             Glide.with(context)
-                    .load(R.drawable.ai)
+                    .load(R.drawable.ic_account)
                     .apply(GlideOptions.getOptions())
                     .into(holder.profile_image);
         }else {

@@ -29,5 +29,7 @@
     <string name="incoming_meeting_invitation">Incoming Meeting Invitation</string>
     <string name="new_meeting">New meeting</string>
     <string name="join_with_a_code">Join with a code</string>
+    <string name="delete_conversation">Delete Conversation</string>
+    <string name="archive_conversation">Archive Conversation</string>
 
 </resources>

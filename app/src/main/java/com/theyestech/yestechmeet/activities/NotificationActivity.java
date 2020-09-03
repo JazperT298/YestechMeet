@@ -105,11 +105,11 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         swipe_Notification.setRefreshing(true);
+                        holder.constraint.setVisibility(View.VISIBLE);
                         if (snapshot.exists()) {
                             String type = snapshot.getValue().toString();
                             if (type.equals("received")) {
                                 swipe_Notification.setRefreshing(false);
-                                holder.constraint.setVisibility(View.VISIBLE);
                                 usersRef.child(listUserId).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {

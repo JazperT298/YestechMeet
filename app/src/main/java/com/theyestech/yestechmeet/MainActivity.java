@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user.getProfilePhoto().equals("default")) {
                     //iv_ProfileImage.setImageResource(R.drawable.ai);
                     Glide.with(getApplicationContext())
-                            .load(R.drawable.ai)
+                            .load(R.drawable.ic_account)
                             .apply(GlideOptions.getOptions())
                             .into(iv_ProfileImage);
                 } else {

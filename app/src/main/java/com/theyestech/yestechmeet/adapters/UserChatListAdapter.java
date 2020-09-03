@@ -75,7 +75,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
 
 
         if (users.getProfilePhoto().equals("default")){
-            viewHolder.profile_image.setImageResource(R.mipmap.ic_launcher);
+            viewHolder.profile_image.setImageResource(R.drawable.ic_account);
         } else {
             Glide.with(context)
                     .load(users.getProfilePhoto())

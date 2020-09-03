@@ -50,7 +50,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         viewHolder.username.setText(users.getName());
         if(users.getProfilePhoto().equals("default")){
             Glide.with(context)
-                    .load(R.drawable.ai)
+                    .load(R.drawable.ic_account)
                     .apply(GlideOptions.getOptions())
                     .into(viewHolder.profile_image);
         }else {

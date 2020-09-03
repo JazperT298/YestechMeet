@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ import com.theyestech.yestechmeet.notifications.Token;
 import com.theyestech.yestechmeet.services.ApiService;
 import com.theyestech.yestechmeet.services.ApiClient;
 import com.theyestech.yestechmeet.services.Client;
+import com.theyestech.yestechmeet.utils.Constants;
+import com.theyestech.yestechmeet.utils.Debugger;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,12 +55,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MessageActivity extends AppCompatActivity implements UsersListener{
+public class MessageActivity extends AppCompatActivity implements UsersListener {
     private Context context;
     //Widgets
     private ImageView profile_image;
     private TextView username;
-    private ImageView btn_send,iv_Back,iv_More,iv_Video,iv_File,iv_Audio;
+    private ImageView btn_send, iv_Back, iv_More, iv_Video, iv_File, iv_Audio;
     private EditText text_send;
     private RecyclerView recyclerView;
     private String role;
@@ -92,6 +96,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         initializeUI();
         setUserHeader();
     }
+
     private void initializeUI() {
         //Firebase Database
         apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiService.class);
@@ -122,7 +127,24 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
 
         iv_Back.setOnClickListener(v -> finish());
         profile_image.setOnClickListener(v -> openUsersProfile(userid));
-        iv_More.setOnClickListener(v -> openUsersProfile(userid));
+        iv_More.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(context, v);
+            popup.getMenuInflater().inflate(R.menu.delete_conversation, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.delete_conversation:
+                        openDeleteChatDialog();
+                        break;
+
+                    case R.id.archive_conversation:
+                        Toasty.info(context, "Wala pa ne").show();
+                        break;
+                }
+                return true;
+            });
+            popup.show();
+        });
         iv_Video.setOnClickListener(v -> {
             if (users.getToken() == null || users.getToken().trim().isEmpty()) {
                 Toast.makeText(context, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
@@ -151,7 +173,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         btn_send.setOnClickListener(view -> {
             notify = true;
             String msg = text_send.getText().toString();
-            if (!msg.equals("")){
+            if (!msg.equals("")) {
                 sendUserMessage(fuser.getUid(), userid, msg, currentDate);
             } else {
                 Toasty.warning(context, "You can't send empty message").show();
@@ -161,17 +183,24 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
 
     }
 
-    private void setUserHeader(){
+    private void setUserHeader() {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 users = dataSnapshot.getValue(Users.class);
                 username.setText(users.getName());
-                Glide.with(getApplicationContext())
-                        .load(users.getProfilePhoto())
-                        .apply(GlideOptions.getOptions())
-                        .into(profile_image);
+                if (users.getProfilePhoto().equals("default")) {
+                    Glide.with(getApplicationContext())
+                            .load(R.drawable.ic_account)
+                            .apply(GlideOptions.getOptions())
+                            .into(profile_image);
+                } else {
+                    Glide.with(getApplicationContext())
+                            .load(users.getProfilePhoto())
+                            .apply(GlideOptions.getOptions())
+                            .into(profile_image);
+                }
                 token = users.getToken();
                 readUserMessages(fuser.getUid(), userid, users.getProfilePhoto());
             }
@@ -184,14 +213,14 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         seenUserMessage(userid);
     }
 
-    private void seenUserMessage(final String userid){
+    private void seenUserMessage(final String userid) {
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         seenListener = reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiverId().equals(fuser.getUid()) && chat.getSenderId().equals(userid)){
+                    if (chat.getReceiverId().equals(fuser.getUid()) && chat.getSenderId().equals(userid)) {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("isseen", true);
                         snapshot.getRef().updateChildren(hashMap);
@@ -206,7 +235,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         });
     }
 
-    private void sendUserMessage(String senderId, final String receiverId, String message, Date currentDate){
+    private void sendUserMessage(String senderId, final String receiverId, String message, Date currentDate) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
@@ -219,7 +248,6 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
 
         reference.child("Chats").push().setValue(hashMap);
 
-
         // add user to chat fragment
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
                 .child(fuser.getUid())
@@ -228,7 +256,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()){
+                if (!dataSnapshot.exists()) {
                     chatRef.child("id").setValue(userid);
                 }
             }
@@ -268,7 +296,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         });
     }
 
-    private void readUserMessages(final String myid, final String userid, final String imageurl){
+    private void readUserMessages(final String myid, final String userid, final String imageurl) {
         chatArrayList = new ArrayList<>();
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -276,10 +304,10 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatArrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
                     if (chat.getReceiverId().equals(myid) && chat.getSenderId().equals(userid) ||
-                            chat.getReceiverId().equals(userid) && chat.getSenderId().equals(myid)){
+                            chat.getReceiverId().equals(userid) && chat.getSenderId().equals(myid)) {
                         chatArrayList.add(chat);
                     }
 
@@ -295,15 +323,15 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         });
     }
 
-    private void sendUserNotification(String receiver, final String username, final String message){
+    private void sendUserNotification(String receiver, final String username, final String message) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message", currentDate,
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Message", currentDate,
                             userid);
 
                     Sender sender = new Sender(data, token.getToken());
@@ -312,8 +340,8 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
                             .enqueue(new Callback<MyResponse>() {
                                 @Override
                                 public void onResponse(@NotNull Call<MyResponse> call, @NotNull Response<MyResponse> response) {
-                                    if (response.code() == 200){
-                                        if (response.body().success != 1){
+                                    if (response.code() == 200) {
+                                        if (response.body().success != 1) {
                                             Toasty.error(context, "Failed!").show();
                                         }
                                     }
@@ -334,8 +362,8 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         });
     }
 
-    private void openUsersProfile(final String userid){
-        final Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+    private void openUsersProfile(final String userid) {
+        final Dialog dialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.user_friend_profile);
         final ImageView iv_Image, iv_userImage, iv_Back;
         final TextView tv_username, tv_email;
@@ -382,13 +410,31 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
         dialog.show();
     }
 
-    private void currentUser(String userid){
+    private void openDeleteChatDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Delete Conversation")
+                .setIcon(R.drawable.ic_baseline_warning_24)
+                .setMessage("Are you sure you want to delete conversation?")
+                .setPositiveButton("YES", (dialog1, which) -> {
+                    // change this code beacuse your app will crash
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+                    ref.child("Chatlist").child(fuser.getUid()).child(userid).child("id").equalTo(userid);
+                    finish();
+//                    startActivity(new Intent(context, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                })
+                .setNegativeButton("NO", null)
+                .create();
+        dialog.show();
+    }
+
+    private void currentUser(String userid) {
         SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
         editor.putString("currentuser", userid);
         editor.apply();
     }
 
-    private void status(String status){
+    private void status(String status) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -429,7 +475,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener{
     @Override
     public void initiateAudioMeeting(Users users) {
         if (users.getToken() == null || users.getToken().trim().isEmpty()) {
-            Toast.makeText(this, users.getUsername() + " " +  "is not available for meeting", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, users.getUsername() + " " + "is not available for meeting", Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(context, OutgoingInvitationActivity.class);
             intent.putExtra("users", users);

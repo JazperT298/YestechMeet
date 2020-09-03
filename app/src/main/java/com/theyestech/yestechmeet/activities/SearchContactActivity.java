@@ -206,9 +206,9 @@ public class SearchContactActivity extends AppCompatActivity {
                 tv_email.setText(user.getEmail());
                 if (user.getProfilePhoto().equals("default")) {
                     //iv_ProfileImage.setImageResource(R.drawable.ai);
-                    Glide.with(getApplicationContext()).load(R.drawable.ai).into(iv_Image);
+                    Glide.with(getApplicationContext()).load(R.drawable.ic_account).into(iv_Image);
                     Glide.with(getApplicationContext())
-                            .load(R.drawable.ai)
+                            .load(R.drawable.ic_account)
                             .apply(GlideOptions.getOptions())
                             .into(iv_userImage);
                 } else {

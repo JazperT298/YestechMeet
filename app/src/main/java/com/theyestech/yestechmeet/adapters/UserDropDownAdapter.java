@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.theyestech.yestechmeet.R;
+import com.theyestech.yestechmeet.interfaces.OnClickRecyclerView;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.utils.GlideOptions;
 
@@ -63,6 +64,7 @@ public class UserDropDownAdapter extends ArrayAdapter {
                 .into(profile_image);
 
         username.setText(users.getName());
+
 
         return view;
     }

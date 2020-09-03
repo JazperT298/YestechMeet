@@ -33,7 +33,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@mipmap/ic_launcher"
+            android:src="@drawable/user1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_Search"
             app:layout_constraintStart_toEndOf="@+id/iv_Notification"

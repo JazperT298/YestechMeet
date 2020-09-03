@@ -34,6 +34,7 @@ import com.theyestech.yestechmeet.R;
 import com.theyestech.yestechmeet.adapters.MessageAdapter;
 import com.theyestech.yestechmeet.adapters.UserContactsAdapter;
 import com.theyestech.yestechmeet.adapters.UserDropDownAdapter;
+import com.theyestech.yestechmeet.interfaces.OnClickRecyclerView;
 import com.theyestech.yestechmeet.models.Chat;
 import com.theyestech.yestechmeet.models.Users;
 import com.theyestech.yestechmeet.notifications.Data;
@@ -96,6 +97,7 @@ public class NewMessageActivity extends AppCompatActivity {
     private DatabaseReference usersRef, friendRequestRef, contactsRef;
     private String currentUserId;
     private UserContactsAdapter userContactsAdapter;
+    private Users users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +158,7 @@ public class NewMessageActivity extends AppCompatActivity {
                 notify = true;
                 String msg = et_message.getText().toString();
                 if (!msg.equals("")){
-                    sendUserMessage(firebaseUser.getUid(), userid, msg, currentDate);
+                    sendUserMessage(firebaseUser.getUid(), receiverId, msg, currentDate);
                 } else {
                     Toasty.warning(context, "You can't send empty message").show();
                 }
@@ -180,6 +182,8 @@ public class NewMessageActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 userDropDownAdapter.getFilter().filter(charSequence);
+                users = userDropDownAdapter.getItem(i);
+
                 //searchUsers(charSequence.toString().toLowerCase());
             }
 

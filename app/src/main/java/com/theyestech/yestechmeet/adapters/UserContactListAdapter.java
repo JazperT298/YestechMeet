@@ -59,10 +59,11 @@ public class UserContactListAdapter extends RecyclerView.Adapter<UserContactList
 
     public class UsersViewHolder extends RecyclerView.ViewHolder {
         private TextView username;
-        private ImageView profile_image, iv_VideoMeeting, iv_AudioMeeting,iv_ImageSelected;
+        private ImageView profile_image, iv_VideoMeeting, iv_AudioMeeting, iv_ImageSelected;
         private ImageView img_on;
         private ImageView img_off;
         private ConstraintLayout constraint;
+
         public UsersViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.username);
@@ -74,11 +75,19 @@ public class UserContactListAdapter extends RecyclerView.Adapter<UserContactList
             iv_AudioMeeting = itemView.findViewById(R.id.iv_AudioMeeting);
             iv_ImageSelected = itemView.findViewById(R.id.iv_ImageSelected);
         }
+
         void setUsersData(Users users) {
-            Glide.with(context)
-                    .load(users.getProfilePhoto())
-                    .apply(GlideOptions.getOptions())
-                    .into(profile_image);
+            if (users.getProfilePhoto().equals("default")) {
+                Glide.with(context)
+                        .load(R.drawable.ic_account)
+                        .apply(GlideOptions.getOptions())
+                        .into(profile_image);
+            } else {
+                Glide.with(context)
+                        .load(users.getProfilePhoto())
+                        .apply(GlideOptions.getOptions())
+                        .into(profile_image);
+            }
             username.setText(users.getName());
             iv_AudioMeeting.setOnClickListener(v -> usersListener.initiateAudioMeeting(users));
             iv_VideoMeeting.setOnClickListener(v -> usersListener.initiateVideoMeeting(users));

@@ -134,8 +134,8 @@
                     android:layout_height="@dimen/spacing_large"
                     android:layout_marginEnd="@dimen/spacing_medium"
                     android:layout_marginRight="@dimen/spacing_medium"
-                    android:tint="@color/colorWhite"
-                    app:srcCompat="@drawable/ic_email_black_24dp" />
+                    app:srcCompat="@drawable/ic_email_black_24dp"
+                    app:tint="@color/colorWhite" />
 
                 <TextView
                     android:id="@+id/tv_email"
