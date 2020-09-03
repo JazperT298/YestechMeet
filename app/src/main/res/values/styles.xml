@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorGrey</item>
     </style>
     <style name="MenuStyle" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:background">@color/footerBackground</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
     <!--Splash Screen-->
