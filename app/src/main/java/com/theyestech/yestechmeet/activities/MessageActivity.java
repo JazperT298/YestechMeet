@@ -377,6 +377,7 @@ public class MessageActivity extends AppCompatActivity implements UsersListener 
                                                     chatSnapshot.getRef().removeValue();
                                                 }
                                             }
+
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
                                             }

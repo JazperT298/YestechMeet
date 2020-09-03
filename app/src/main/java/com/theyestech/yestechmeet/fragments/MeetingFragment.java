@@ -24,7 +24,7 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.net.URL;
 
-public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener{
+public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
     private View view;
     private Context context;
@@ -34,8 +34,8 @@ public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeL
 
     int[] mResources = {R.drawable.yestechsessions1, R.drawable.yestechsessions3
     };
-    String[] mTitle = {"Create a link","Secure Sessions"};
-    String[] mDescription = {"Tap New session to create a link that you can share to friends or people you want to join the session","Your session is safe and is restricted form others unless you have given access to the person entering the session"};
+    String[] mTitle = {"Create a link", "Secure Sessions"};
+    String[] mDescription = {"Tap New session to create a link that you can share to friends or people you want to join the session", "Your session is safe and is restricted form others unless you have given access to the person entering the session"};
 
     ViewPager mViewPager;
     private CustomPagerAdapter mAdapter;
@@ -54,7 +54,7 @@ public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeL
         return view;
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
         btn_NewMeeting = view.findViewById(R.id.btn_NewMeeting);
         btn_JoinMeeting = view.findViewById(R.id.btn_JoinMeeting);
         btn_NewMeeting.setOnClickListener(v -> {
@@ -64,7 +64,7 @@ public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeL
                 builder.setServerURL(serverURL);
                 builder.setWelcomePageEnabled(true);
                 JitsiMeetActivity.launch(getActivity(), builder.build());
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         });
@@ -75,20 +75,21 @@ public class MeetingFragment extends Fragment implements ViewPager.OnPageChangeL
                 builder.setServerURL(serverURL);
                 builder.setWelcomePageEnabled(true);
                 JitsiMeetActivity.launch(getActivity(), builder.build());
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         });
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         pager_indicator = (LinearLayout) view.findViewById(R.id.viewPagerCountDots);
-        mAdapter = new CustomPagerAdapter(getContext(), mResources,mTitle,mDescription);
+        mAdapter = new CustomPagerAdapter(getContext(), mResources, mTitle, mDescription);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(0);
         mViewPager.setOnPageChangeListener(this);
 
         setPageViewIndicator();
     }
+
     private void setPageViewIndicator() {
 
         Log.d("###setPageViewIndicator", " : called");

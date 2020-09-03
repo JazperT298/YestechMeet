@@ -45,13 +45,14 @@ public class MainActivity extends AppCompatActivity {
     private View view;
     private Context context;
     private ImageView iv_Notification, iv_ProfileImage, iv_More, iv_Search, img_on, img_off;
-    private String calledBy="";
+    private String calledBy = "";
 
     private FirebaseUser firebaseUser;
-    private DatabaseReference reference,usersRef;
+    private DatabaseReference reference, usersRef;
     private String currentUserId;
 
     private Users users;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if(task.isSuccessful() && task.getResult() != null){
+                if (task.isSuccessful() && task.getResult() != null) {
                     sendFCMTokenToDatabase(task.getResult().getToken());
                 }
             }
@@ -129,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
             popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
 
             popup.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()){
-                    case  R.id.logout:
+                switch (item.getItemId()) {
+                    case R.id.logout:
                         openLogoutDialog();
                         break;
                     case R.id.profile:
@@ -178,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 .create();
         dialog.show();
     }
-    private void status(String status){
+
+    private void status(String status) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -198,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         status("offline");
     }
-
 
 
 }

@@ -18,7 +18,7 @@ import com.theyestech.yestechmeet.models.Notification;
 
 import java.util.ArrayList;
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder>  {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     private View view;
     private Context context;
@@ -27,11 +27,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private OnClickRecyclerView onClickRecyclerView;
 
 
-    public NotificationAdapter(Context context, ArrayList<Notification> notificationArrayList){
+    public NotificationAdapter(Context context, ArrayList<Notification> notificationArrayList) {
         this.notificationArrayList = notificationArrayList;
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,7 +52,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView username,tv_DeclineRequest,tv_AcceptRequest;
+        private TextView username, tv_DeclineRequest, tv_AcceptRequest;
         private ImageView profile_image;
         private ImageView img_on;
         private ImageView img_off;
@@ -89,6 +90,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             });
         }
     }
+
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
     }

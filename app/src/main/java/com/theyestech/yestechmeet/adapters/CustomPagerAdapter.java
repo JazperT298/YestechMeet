@@ -35,7 +35,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
-        View itemView = mLayoutInflater.inflate(R.layout.pager_item,container,false);
+        View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
         TextView textView1 = itemView.findViewById(R.id.textView1);
         TextView textView2 = itemView.findViewById(R.id.textView2);

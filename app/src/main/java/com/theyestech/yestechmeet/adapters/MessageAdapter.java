@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
 
-    public static  final int MSG_TYPE_LEFT = 0;
-    public static  final int MSG_TYPE_RIGHT = 1;
+    public static final int MSG_TYPE_LEFT = 0;
+    public static final int MSG_TYPE_RIGHT = 1;
 
     private Context mContext;
     private ArrayList<Chat> chatArrayList;
@@ -32,7 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     FirebaseUser fuser;
 
-    public MessageAdapter(Context mContext, ArrayList<Chat> chatArrayList, String imageurl){
+    public MessageAdapter(Context mContext, ArrayList<Chat> chatArrayList, String imageurl) {
         this.chatArrayList = chatArrayList;
         this.mContext = mContext;
         this.imageurl = imageurl;
@@ -57,9 +57,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         holder.show_message.setText(chat.getMessage());
         //holder.date.setText(DateTimeHandler.getMessageDateDisplay(chat.getMessageDateCreated()));
-        if(imageurl.equals("default")){
+        if (imageurl.equals("default")) {
             Glide.with(mContext).load(R.drawable.ic_account).into(holder.profile_image);
-        }else {
+        } else {
             Glide.with(mContext)
                     .load(imageurl)
                     .apply(GlideOptions.getOptions())
@@ -67,8 +67,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
 
-        if (position == chatArrayList.size()-1){
-            if (chat.isIsseen()){
+        if (position == chatArrayList.size() - 1) {
+            if (chat.isIsseen()) {
                 holder.txt_seen.setText("Seen");
             } else {
                 holder.txt_seen.setText("Delivered");
@@ -84,7 +84,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return chatArrayList.size();
     }
 
-    public  class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView show_message;
         public ImageView profile_image;
@@ -111,12 +111,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public int getItemViewType(int position) {
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        if (chatArrayList.get(position).getSenderId().equals(fuser.getUid())){
+        if (chatArrayList.get(position).getSenderId().equals(fuser.getUid())) {
             return MSG_TYPE_RIGHT;
         } else {
             return MSG_TYPE_LEFT;
         }
     }
+
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
     }

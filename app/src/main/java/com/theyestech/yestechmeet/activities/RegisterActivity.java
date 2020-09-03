@@ -54,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         initializeUI();
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
 
         auth = FirebaseAuth.getInstance();
 
@@ -75,9 +75,9 @@ public class RegisterActivity extends AppCompatActivity {
             String txt_email = et_email.getText().toString();
             String txt_password = et_password.getText().toString();
 
-            if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+            if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show();
-            } else if (txt_password.length() < 6 ){
+            } else if (txt_password.length() < 6) {
                 Toast.makeText(context, "password must be at least 6 characters", Toast.LENGTH_SHORT).show();
             } else {
                 registerUser(txt_username, txt_email, txt_password);
@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void registerUser(final String username, final String email, String password){
+    private void registerUser(final String username, final String email, String password) {
         progressDialog.setTitle("User Registration");
         progressDialog.setMessage("Please wait, while we are verifying your account");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = auth.getCurrentUser();
                         assert firebaseUser != null;
                         String userid = firebaseUser.getUid();
@@ -112,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                         hashMap.put("search", username.toLowerCase());
 
                         reference.setValue(hashMap).addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()){
+                            if (task1.isSuccessful()) {
                                 progressDialog.dismiss();
                                 Intent intent = new Intent(context, LoginActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

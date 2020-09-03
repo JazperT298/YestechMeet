@@ -27,7 +27,7 @@ public class UserContactsAdapter extends RecyclerView.Adapter<UserContactsAdapte
     private LayoutInflater layoutInflater;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public UserContactsAdapter(Context context, ArrayList<Users> usersArrayList, boolean ischat){
+    public UserContactsAdapter(Context context, ArrayList<Users> usersArrayList, boolean ischat) {
         this.usersArrayList = usersArrayList;
         this.context = context;
         this.ischat = ischat;
@@ -47,12 +47,12 @@ public class UserContactsAdapter extends RecyclerView.Adapter<UserContactsAdapte
         final Users users = usersArrayList.get(position);
 
         holder.username.setText(users.getName());
-        if(users.getProfilePhoto().equals("default")){
+        if (users.getProfilePhoto().equals("default")) {
             Glide.with(context)
                     .load(R.drawable.ic_account)
                     .apply(GlideOptions.getOptions())
                     .into(holder.profile_image);
-        }else {
+        } else {
             Glide.with(context)
                     .load(users.getProfilePhoto())
                     .apply(GlideOptions.getOptions())
@@ -62,7 +62,7 @@ public class UserContactsAdapter extends RecyclerView.Adapter<UserContactsAdapte
 
     @Override
     public int getItemCount() {
-        return  usersArrayList.size();
+        return usersArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,6 +85,7 @@ public class UserContactsAdapter extends RecyclerView.Adapter<UserContactsAdapte
             });
         }
     }
+
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
     }

@@ -33,7 +33,7 @@ public class Constants {
 
     public static final String REMOTE_MSG_MEETING_ROOM = "meetingRoom";
 
-    public static HashMap<String, String> getRemoteMessageHeader(){
+    public static HashMap<String, String> getRemoteMessageHeader() {
         HashMap<String, String> headers = new HashMap<>();
         headers.put(Constants.REMOTE_MSG_AUTHORIZATION, "key=AAAA-SAcS08:APA91bHlebGjNkmtlgi2NHvCsZ6xzSIWRVsQPqlyi-SPBpW_DCPPvbBoe57Rj8h2RHM-SxGZfwgMot277kegBG5VBt96QJaU5AHgoPa_zWZ0RTAp6Hc7geoOk9jpOFxvcjTBn2xKp7Pr");
         headers.put(Constants.REMOTE_MSG_CONTENT_TYPE, "application/json");

@@ -24,7 +24,7 @@ import com.theyestech.yestechmeet.R;
 public class LoginActivity extends AppCompatActivity {
     private View view;
     private Context context;
-    private TextView sign_up,forgot_password;
+    private TextView sign_up, forgot_password;
     private TextInputEditText et_email, et_password;
     private Button btn_login;
     private ProgressDialog progressDialog;
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         initializeUI();
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
         auth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(context);
 
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             String txt_email = et_email.getText().toString();
             String txt_password = et_password.getText().toString();
 
-            if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
+            if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
                 Toast.makeText(LoginActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
             } else {
                 progressDialog.setTitle("User Confirmation");
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 auth.signInWithEmailAndPassword(txt_email, txt_password)
                         .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 progressDialog.dismiss();
                                 Intent intent = new Intent(context, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

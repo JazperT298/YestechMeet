@@ -110,7 +110,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
             }
         }
         if (users != null) {
-            tv_Username.setText( users.getName());
+            tv_Username.setText(users.getName());
             tv_Email.setText(users.getEmail());
             Glide.with(getApplicationContext())
                     .load(users.getProfilePhoto())
@@ -164,7 +164,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
                     } else {
                         if (users != null) {
                             totalReceivers = 1;
-                            initiateMeeting(meetingType,users.getToken(), null);
+                            initiateMeeting(meetingType, users.getToken(), null);
                         }
                     }
                 }
@@ -319,7 +319,7 @@ public class OutgoingInvitationActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(invitationResponseReceiver);
     }
 
-    private void status(String status){
+    private void status(String status) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();

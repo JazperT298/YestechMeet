@@ -33,6 +33,7 @@ public class UserDropDownAdapter extends ArrayAdapter {
         this.context = context;
         itemLayout = resource;
     }
+
     @Override
     public int getCount() {
         assert usersArrayList != null;

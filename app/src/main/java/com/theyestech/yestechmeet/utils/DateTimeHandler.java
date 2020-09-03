@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class DateTimeHandler {
 
-    public static String getMessageDateDisplay(Date date){
+    public static String getMessageDateDisplay(Date date) {
         DateFormat yearFormat = new SimpleDateFormat("MMM dd yy | hh:mm aa");
         DateFormat dayFormat = new SimpleDateFormat("MMM dd | hh:mm aa");
         DateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
@@ -18,13 +18,13 @@ public class DateTimeHandler {
         String stringDate = "";
 
         Date messageCreated = date;
-        if (messageCreated.getYear() == year){
-            if (messageCreated.getDay() == day){
+        if (messageCreated.getYear() == year) {
+            if (messageCreated.getDay() == day) {
                 stringDate = timeFormat.format(messageCreated);
-            }else{
+            } else {
                 stringDate = dayFormat.format(messageCreated);
             }
-        }else{
+        } else {
             stringDate = yearFormat.format(messageCreated);
         }
 

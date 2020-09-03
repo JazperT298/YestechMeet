@@ -44,14 +44,15 @@ public class IncomingInvitationActivity extends AppCompatActivity {
     private View view;
     private Context context;
 
-    private ImageView iV_MeetingType, iv_AcceptInvitation, iv_RejectInvitation,iv_ProfileImage;
-    private TextView  tv_Username, tv_Email;
+    private ImageView iV_MeetingType, iv_AcceptInvitation, iv_RejectInvitation, iv_ProfileImage;
+    private TextView tv_Username, tv_Email;
     private String meetingType = null;
     private Users users;
 
     private String inviterToken = null;
-    private DatabaseReference reference,usersRef;
+    private DatabaseReference reference, usersRef;
     private FirebaseUser firebaseUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class IncomingInvitationActivity extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         initializeUI();
     }
+
     private void initializeUI() {
         iV_MeetingType = findViewById(R.id.iV_MeetingType);
         iv_AcceptInvitation = findViewById(R.id.iv_AcceptInvitation);
@@ -72,7 +74,7 @@ public class IncomingInvitationActivity extends AppCompatActivity {
         if (meetingType != null) {
             if (meetingType.equals("video")) {
                 iV_MeetingType.setImageResource(R.drawable.ic_video);
-            }else{
+            } else {
                 iV_MeetingType.setImageResource(R.drawable.ic_audio);
             }
         }
@@ -130,13 +132,13 @@ public class IncomingInvitationActivity extends AppCompatActivity {
                                     builder.setServerURL(serverURL);
                                     builder.setWelcomePageEnabled(false);
                                     builder.setRoom(getIntent().getStringExtra(Constants.REMOTE_MSG_MEETING_ROOM));
-                                    if(meetingType.equals("audio")){
+                                    if (meetingType.equals("audio")) {
                                         builder.setVideoMuted(true);
                                     }
                                     JitsiMeetActivity.launch(context, builder.build());
                                     finish();
-                                }catch (Exception e){
-                                    Toast.makeText(context,"FUCK " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                } catch (Exception e) {
+                                    Toast.makeText(context, "FUCK " + e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 Toast.makeText(context, "Invitation rejected", Toast.LENGTH_LONG).show();
@@ -161,8 +163,8 @@ public class IncomingInvitationActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String type = intent.getStringExtra(Constants.REMOTE_MSG_INVITATION_RESPONSE);
-            if(type != null){
-                if(type.equals(Constants.REMOTE_MSG_INVITATION_CANCELLED)){
+            if (type != null) {
+                if (type.equals(Constants.REMOTE_MSG_INVITATION_CANCELLED)) {
                     Toast.makeText(context, "Invitation Cancelled", Toast.LENGTH_LONG).show();
                     finish();
                 }
@@ -182,7 +184,7 @@ public class IncomingInvitationActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(invitationResponseReceiver);
     }
 
-    private void status(String status){
+    private void status(String status) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();

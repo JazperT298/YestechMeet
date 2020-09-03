@@ -197,7 +197,7 @@ public class NewMessageActivity extends AppCompatActivity {
             } else {
                 notify = true;
                 String msg = et_message.getText().toString();
-                if (!msg.equals("")){
+                if (!msg.equals("")) {
                     sendUserMessage(firebaseUser.getUid(), receiverId, msg, currentDate);
                 } else {
                     Toasty.warning(context, "You can't send empty message").show();
@@ -478,7 +478,8 @@ public class NewMessageActivity extends AppCompatActivity {
             }
         });
     }
-    private void status(String status){
+
+    private void status(String status) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -498,7 +499,8 @@ public class NewMessageActivity extends AppCompatActivity {
         super.onPause();
         status("offline");
     }
-    private void openBottomSheetDialog(){
+
+    private void openBottomSheetDialog() {
 
         View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_chose_photo, null);
 
@@ -530,10 +532,10 @@ public class NewMessageActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void askCameraPermissions(){
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-        }else  {
+    private void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
             pickCamera();
         }
     }
@@ -553,9 +555,9 @@ public class NewMessageActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
-    private void pickCamera(){
+    private void pickCamera() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
+        startActivityForResult(takePicture, CAMERA_REQUEST_CODE);//
     }
 
 
@@ -591,7 +593,7 @@ public class NewMessageActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMAGE_PICK_GALLERY_CODE && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+                && data != null && data.getData() != null) {
             imageUri = data.getData();
 //
 //            iv_Images.setImageURI(imageUri);
@@ -600,8 +602,8 @@ public class NewMessageActivity extends AppCompatActivity {
 //                    .apply(GlideOptions.getOptions())
 //                    .into(iv_userImages);
 
-        }else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Bitmap image = (Bitmap) data.getExtras().get("data");
 
@@ -629,7 +631,6 @@ public class NewMessageActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
 }

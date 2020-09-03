@@ -38,13 +38,13 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
-        if (firebaseUser != null){
+        if (firebaseUser != null) {
             updateToken(refreshToken);
         }
         String recent_token = FirebaseInstanceId.getInstance().getToken();
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(getString(R.string.FCM_TOKEN),recent_token);
+        editor.putString(getString(R.string.FCM_TOKEN), recent_token);
         editor.apply();
     }
 
@@ -63,13 +63,13 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         String sented = remoteMessage.getData().get("sented");
         String user = remoteMessage.getData().get("user");
-        if(sented == null || user == null){
+        if (sented == null || user == null) {
             sendMeetingNotification(remoteMessage);
-        }else{
+        } else {
             SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
             String currentUser = preferences.getString("currentuser", "none");
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
+            if (firebaseUser != null && sented.equals(firebaseUser.getUid())) {
                 if (!currentUser.equals(user)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         sendOreoNotification(remoteMessage);
@@ -81,10 +81,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
     }
 
-    private void sendMeetingNotification(RemoteMessage remoteMessage){
+    private void sendMeetingNotification(RemoteMessage remoteMessage) {
         String type = remoteMessage.getData().get(Constants.REMOTE_MSG_TYPE);
-        if(type != null){
-            if(type.equals(Constants.REMOTE_MSG_INVITATION)){
+        if (type != null) {
+            if (type.equals(Constants.REMOTE_MSG_INVITATION)) {
                 Intent intent = new Intent(getApplicationContext(), IncomingInvitationActivity.class);
                 intent.putExtra(Constants.REMOTE_MSG_MEETING_TYPE, remoteMessage.getData().get(Constants.REMOTE_MSG_MEETING_TYPE));
                 intent.putExtra(Constants.KEY_FIRST_NAME, remoteMessage.getData().get(Constants.KEY_FIRST_NAME));
@@ -94,7 +94,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 intent.putExtra(Constants.REMOTE_MSG_MEETING_ROOM, remoteMessage.getData().get(Constants.REMOTE_MSG_MEETING_ROOM));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-            }else if (type.equals(Constants.REMOTE_MSG_INVITATION_RESPONSE)){
+            } else if (type.equals(Constants.REMOTE_MSG_INVITATION_RESPONSE)) {
                 Intent intent = new Intent(Constants.REMOTE_MSG_INVITATION_RESPONSE);
                 intent.putExtra(Constants.REMOTE_MSG_INVITATION_RESPONSE, remoteMessage.getData().get(Constants.REMOTE_MSG_INVITATION_RESPONSE));
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
@@ -102,7 +102,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
     }
 
-    private void sendOreoNotification(RemoteMessage remoteMessage){
+    private void sendOreoNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
@@ -123,7 +123,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 defaultSound, icon);
 
         int i = 0;
-        if (j > 0){
+        if (j > 0) {
             i = j;
         }
 
@@ -155,10 +155,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setSound(defaultSound)
                 .setContentIntent(pendingIntent);
-        NotificationManager noti = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager noti = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         int i = 0;
-        if (j > 0){
+        if (j > 0) {
             i = j;
         }
 

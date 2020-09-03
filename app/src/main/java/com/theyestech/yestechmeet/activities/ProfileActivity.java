@@ -59,7 +59,7 @@ import es.dmoral.toasty.Toasty;
 public class ProfileActivity extends AppCompatActivity {
     private View view;
     private Context context;
-    private ImageView iv_Image, iv_userImage, iv_Back,iv_Images, iv_userImages,iv_UserDetailsCamera;
+    private ImageView iv_Image, iv_userImage, iv_Back, iv_Images, iv_userImages, iv_UserDetailsCamera;
     private TextInputEditText et_username;
     private AppCompatButton appCompatButton;
     private TextView tv_username, tv_email;
@@ -92,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
     private File myFile;
 
     private BottomSheetDialog bottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
         initializeUI();
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
         iv_Image = findViewById(R.id.iv_Image);
         iv_userImage = findViewById(R.id.iv_userImage);
         iv_Back = findViewById(R.id.iv_Back);
@@ -170,12 +171,12 @@ public class ProfileActivity extends AppCompatActivity {
         appCompatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(appCompatButton.getText().equals("Edit")){
+                if (appCompatButton.getText().equals("Edit")) {
                     nested_content.setVisibility(View.GONE);
                     nested_content2.setVisibility(View.VISIBLE);
                     appCompatButton.setText("SAVE");
-                }else{
-                    if (uploadTask != null && uploadTask.isInProgress()){
+                } else {
+                    if (uploadTask != null && uploadTask.isInProgress()) {
                         Toast.makeText(context, "Upload in progress", Toast.LENGTH_SHORT).show();
                     } else {
                         uploadImage();
@@ -193,7 +194,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void openBottomSheetDialog(){
+    private void openBottomSheetDialog() {
 
         View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_chose_photo, null);
 
@@ -225,10 +226,10 @@ public class ProfileActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void askCameraPermissions(){
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-        }else  {
+    private void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
             pickCamera();
         }
     }
@@ -248,9 +249,9 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_PICK_GALLERY_CODE);
     }
 
-    private void pickCamera(){
+    private void pickCamera() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture,  CAMERA_REQUEST_CODE);//
+        startActivityForResult(takePicture, CAMERA_REQUEST_CODE);//
     }
 
 
@@ -286,7 +287,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMAGE_PICK_GALLERY_CODE && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+                && data != null && data.getData() != null) {
             imageUri = data.getData();
 
             iv_Images.setImageURI(imageUri);
@@ -295,8 +296,8 @@ public class ProfileActivity extends AppCompatActivity {
                     .apply(GlideOptions.getOptions())
                     .into(iv_userImages);
 
-        }else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
-                && data != null && data.getData() != null){
+        } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Bitmap image = (Bitmap) data.getExtras().get("data");
 
@@ -332,35 +333,35 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_REQUEST);
     }
 
-    private String getFileExtension(Uri uri){
+    private String getFileExtension(Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         final ProgressDialog pd = new ProgressDialog(context);
         pd.setMessage("Saving");
         pd.show();
 
-        if (imageUri != null){
+        if (imageUri != null) {
             final StorageReference fileReference = storageReference.child(System.currentTimeMillis()
-                    +"."+getFileExtension(imageUri));
+                    + "." + getFileExtension(imageUri));
 
             uploadTask = fileReference.putFile(imageUri);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()){
-                        throw  task.getException();
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
                     }
 
-                    return  fileReference.getDownloadUrl();
+                    return fileReference.getDownloadUrl();
                 }
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         String mUri = downloadUri.toString();
 
@@ -368,7 +369,7 @@ public class ProfileActivity extends AppCompatActivity {
                         HashMap<String, Object> map = new HashMap<>();
 
                         map.put("name", et_username.getText().toString());
-                        map.put("profilePhoto", ""+mUri);
+                        map.put("profilePhoto", "" + mUri);
                         map.put("search", et_username.getText().toString().toLowerCase());
                         map.put("username", et_username.getText().toString());
 
@@ -395,7 +396,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void status(String status){
+    private void status(String status) {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();

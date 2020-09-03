@@ -22,6 +22,7 @@ public class StartActivity extends AppCompatActivity {
     private ConstraintLayout constraintEducator, constraintStudent;
 
     private FirebaseUser firebaseUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class StartActivity extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //check if user is null
-        if (firebaseUser != null){
+        if (firebaseUser != null) {
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -38,7 +39,7 @@ public class StartActivity extends AppCompatActivity {
         initializeUI();
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);

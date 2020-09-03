@@ -42,7 +42,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
 
     String theLastMessage;
 
-    public UserChatListAdapter(Context context, ArrayList<Users> usersArrayList, boolean ischat){
+    public UserChatListAdapter(Context context, ArrayList<Users> usersArrayList, boolean ischat) {
         this.context = context;
         this.usersArrayList = usersArrayList;
         this.ischat = ischat;
@@ -67,14 +67,14 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
         viewHolder.name.setText(users.getName());
 //        }
         //viewHolder.date.setText(DateTimeHandler.getMessageDateDisplay(users.getMessageDateCreated()));
-        if (ischat){
+        if (ischat) {
             lastMessage(users.getId(), viewHolder.last_msg, viewHolder.date);
         } else {
             viewHolder.last_msg.setVisibility(View.GONE);
         }
 
 
-        if (users.getProfilePhoto().equals("default")){
+        if (users.getProfilePhoto().equals("default")) {
             viewHolder.profile_image.setImageResource(R.drawable.ic_account);
         } else {
             Glide.with(context)
@@ -82,8 +82,8 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
                     .apply(GlideOptions.getOptions())
                     .into(viewHolder.profile_image);
         }
-        if (ischat){
-            if (users.getStatus().equals("online")){
+        if (ischat) {
+            if (users.getStatus().equals("online")) {
                 viewHolder.img_on.setVisibility(View.VISIBLE);
                 viewHolder.img_off.setVisibility(View.GONE);
             } else {
@@ -150,8 +150,9 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
     }
+
     //check for last message
-    private void lastMessage(final String userid, final TextView last_msg, final TextView date){
+    private void lastMessage(final String userid, final TextView last_msg, final TextView date) {
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -159,7 +160,7 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
                     if (firebaseUser != null && chat != null) {
                         if (chat.getReceiverId().equals(firebaseUser.getUid()) && chat.getSenderId().equals(userid) ||
@@ -170,16 +171,16 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
                     }
                 }
 
-                switch (theLastMessage){
-                    case  "default":
+                switch (theLastMessage) {
+                    case "default":
                         last_msg.setText("No Message");
                         break;
 
                     default:
-                        if (theLastMessage.length() <= 30){
+                        if (theLastMessage.length() <= 30) {
                             last_msg.setText(theLastMessage);
-                        }else{
-                            last_msg.setText(theLastMessage.substring(0, 30) + "..." );
+                        } else {
+                            last_msg.setText(theLastMessage.substring(0, 30) + "...");
                         }
                         break;
                 }
@@ -194,8 +195,8 @@ public class UserChatListAdapter extends RecyclerView.Adapter<UserChatListAdapte
         });
     }
 
-    private void openUsersProfile(final String userid){
-        final Dialog dialog=new Dialog(context,android.R.style.Theme_Light_NoTitleBar);
+    private void openUsersProfile(final String userid) {
+        final Dialog dialog = new Dialog(context, android.R.style.Theme_Light_NoTitleBar);
         dialog.setContentView(R.layout.user_profile_dialog);
         final ImageView iv_Image, iv_userImage, iv_Back;
         final TextView tv_username, tv_email;

@@ -57,7 +57,7 @@ public class ContactsFragment extends Fragment implements UsersListener {
     private SwipeRefreshLayout swipe_Contacts;
     private ConstraintLayout indicator_empty_chat;
     private RecyclerView rv_Contacts;
-    private FloatingActionButton fab_NewContact,iv_Conference;
+    private FloatingActionButton fab_NewContact, iv_Conference;
     private ProgressBar progress_Contact;
     private List<Users> usersArrayList = new ArrayList<>();
     private UsersAdapter usersAdapter;
@@ -112,7 +112,7 @@ public class ContactsFragment extends Fragment implements UsersListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 contactsList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Contacts contactList = snapshot.getValue(Contacts.class);
                     contactsList.add(contactList);
                 }
@@ -159,6 +159,7 @@ public class ContactsFragment extends Fragment implements UsersListener {
                             });
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -211,8 +212,8 @@ public class ContactsFragment extends Fragment implements UsersListener {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users users = snapshot.getValue(Users.class);
                     swipe_Contacts.setRefreshing(false);
-                    for(Contacts contacts : contactsList){
-                        if(users.getId().equals(contacts.getId())){
+                    for (Contacts contacts : contactsList) {
+                        if (users.getId().equals(contacts.getId())) {
                             usersArrayList.add(users);
                         }
                     }

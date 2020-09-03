@@ -44,8 +44,8 @@ public class ChatFragment extends Fragment {
     private Context context;
     private DatabaseReference reference;
 
-    private TextView tvHeader,tv_UserName;
-    private ImageView ivProfile,iv_UserImage;
+    private TextView tvHeader, tv_UserName;
+    private ImageView ivProfile, iv_UserImage;
     private SwipeRefreshLayout swipe_ChatThreads;
     private RecyclerView rv_ChatThreads, rv_Contacts;
     private ConstraintLayout emptyIndicator;
@@ -66,7 +66,8 @@ public class ChatFragment extends Fragment {
     private Users selectedUsers;
     private DatabaseReference usersRef;
     private String currentUserId;
-    private String calledBy="";
+    private String calledBy = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class ChatFragment extends Fragment {
         return view;
     }
 
-    private void initializeUI(){
+    private void initializeUI() {
         rv_Contacts = view.findViewById(R.id.rv_Contacts);
         rv_ChatThreads = view.findViewById(R.id.rv_ChatThreads);
         swipe_ChatThreads = view.findViewById(R.id.swipe_ChatThreads);
@@ -112,7 +113,7 @@ public class ChatFragment extends Fragment {
         progressBar.setVisibility(isAccessing ? View.VISIBLE : View.GONE);
     }
 
-    private void getAllChats(){
+    private void getAllChats() {
         accessingServer(true);
         chatlistArrayList = new ArrayList<>();
 
@@ -121,7 +122,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatlistArrayList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     chatlistArrayList.add(chatlist);
                 }
@@ -129,6 +130,7 @@ public class ChatFragment extends Fragment {
                 chatUserList();
                 accessingServer(false);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 accessingServer(false);
@@ -145,10 +147,10 @@ public class ChatFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersArrayList.clear();
                 emptyIndicator.setVisibility(View.GONE);
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users users = snapshot.getValue(Users.class);
-                    for (Chatlist chatlist : chatlistArrayList){
-                        if (users.getId().equals(chatlist.getId())){
+                    for (Chatlist chatlist : chatlistArrayList) {
+                        if (users.getId().equals(chatlist.getId())) {
                             usersArrayList.add(users);
                         }
                     }
@@ -198,7 +200,7 @@ public class ChatFragment extends Fragment {
     }
 
 
-    private void updateToken(String token){
+    private void updateToken(String token) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
         reference.child(firebaseUser.getUid()).setValue(token1);

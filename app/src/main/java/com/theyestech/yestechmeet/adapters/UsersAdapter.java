@@ -27,7 +27,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     private LayoutInflater layoutInflater;
     private OnClickRecyclerView onClickRecyclerView;
 
-    public UsersAdapter(Context context, ArrayList<Users> usersArrayList, boolean ischat){
+    public UsersAdapter(Context context, ArrayList<Users> usersArrayList, boolean ischat) {
         this.usersArrayList = usersArrayList;
         this.context = context;
         this.ischat = ischat;
@@ -48,18 +48,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         final Users users = usersArrayList.get(position);
 
         viewHolder.username.setText(users.getName());
-        if(users.getProfilePhoto().equals("default")){
+        if (users.getProfilePhoto().equals("default")) {
             Glide.with(context)
                     .load(R.drawable.ic_account)
                     .apply(GlideOptions.getOptions())
                     .into(viewHolder.profile_image);
-        }else {
+        } else {
             Glide.with(context)
                     .load(users.getProfilePhoto())
                     .apply(GlideOptions.getOptions())
                     .into(viewHolder.profile_image);
         }
-        if (users.getStatus().equals("online")){
+        if (users.getStatus().equals("online")) {
             viewHolder.img_on.setVisibility(View.VISIBLE);
             viewHolder.img_off.setVisibility(View.GONE);
         } else {
@@ -94,6 +94,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             });
         }
     }
+
     public void setClickListener(OnClickRecyclerView onClickRecyclerView) {
         this.onClickRecyclerView = onClickRecyclerView;
     }
