@@ -14,7 +14,7 @@
     <fragment
         android:id="@+id/navigation_meeting"
         android:name="com.theyestech.yestechmeet.fragments.MeetingFragment"
-        android:label="@string/title_meeting"
+        android:label="@string/title_session"
         tools:layout="@layout/fragment_meeting" />
 
     <fragment

@@ -9,7 +9,7 @@
     <item
         android:id="@+id/navigation_meeting"
         android:icon="@drawable/ic_meeting"
-        android:title="@string/title_meeting" />
+        android:title="@string/title_session" />
 
     <item
         android:id="@+id/navigation_contacts"

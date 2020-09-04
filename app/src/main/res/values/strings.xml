@@ -32,5 +32,6 @@
     <string name="delete_conversation">Delete Conversation</string>
     <string name="archive_conversation">Archive Conversation</string>
     <string name="new_session">New session</string>
+    <string name="title_session">Session</string>
 
 </resources>
